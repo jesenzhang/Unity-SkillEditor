@@ -1,0 +1,194 @@
+
+
+ZYskill_7_ChenJN_j1_2
+
+ZYskill_7_ChenJN_j2_1
+
+ZYskill_7_ChenJN_j2_3
+
+ZYskill_7_ChenJN_p1_2
+
+ZYskill_7_ChenJN_p1_3
+
+ZYskill_7_ChenJN_p2_2
+
+ZYnpc_ChenJN
+
+
+ZYnpc_HeTS
+
+ZYnpc_XingDHS
+
+ZYnpc_FangY
+
+ZYcha_emei_d
+
+ZYnpc_WangFJD
+
+
+ZYnpc_AoB1
+
+
+ZYnpc_AoB2
+
+ZYnpc_HouCHZ
+
+ZYnpc_ShiWZG
+
+ZYnpc_WangFGJ
+
+	ZYsta_1_3
+
+	ZYsta_1_4
+
+	ZYsta_1_5
+
+	ZYsta_1_6
+
+	ZYsta_1_7
+
+	ZYsta_1_8
+
+	ZYsta_1_9
+
+	ZYsta_2_1
+
+	ZYsta_2_2
+
+	ZYsta_3_1
+
+	ZYsta_3_2
+
+	ZYsta_3_3
+
+ZYskill_1_p1_2
+
+ZYskill_1_p2_2
+
+ZYcha_emei_d_skill01_1_eff
+
+ZYcha_emei_d_skill01_2_eff
+
+ZYcha_emei_d_skill01_3_eff
+
+ZYcha_emei_d_skill01_D1_eff
+
+ZYcha_emei_d_skill01_D2_eff
+
+ZYcha_emei_d_skill01_D3_eff
+
+ZYcha_emei_d_skill01_D4_eff
+
+ZYcha_emei_d_skill01_hit_eff
+
+ZYcha_emei_d_skill1_D1_eff
+
+ZYcha_emei_d_skill1_eff
+
+ZYcha_emei_d_skill2_1_eff
+
+ZYcha_emei_d_skill2_3_eff
+
+ZYcha_emei_d_skill2_4_eff
+
+ZYcha_emei_d_skill2_D_eff
+
+ZYcha_emei_d_skill3_1_eff
+
+ZYcha_emei_d_skill3_b_eff
+
+ZYcha_emei_d_skill3_eff
+
+ZYcha_emei_d_skill4_eff
+
+ZYnpc_AoB1_hit_eff
+
+ZYnpc_AoB1_skill_01_eff
+
+ZYnpc_AoB1_skill_1_eff
+
+ZYnpc_AoB1_skill_2_eff
+
+ZYnpc_AoB1_skill_3_eff
+
+ZYnpc_AoB1_skill_1_YJ_eff
+
+ZYnpc_AoB1_skill_2_YJ_eff
+
+ZYnpc_AoB1_skill_3_YJ_eff
+
+ZYnpc_AoB2_skill_1_YJ_eff
+
+ZYnpc_AoB2_skill_2_YJ_eff
+
+ZYnpc_AoB2_skill_3_YJ_eff
+
+ZYnpc_HouCHZ_skill_1_YJ_eff
+
+ZYnpc_AoB2_skill_01_eff
+
+ZYnpc_AoB2_skill_01_hit_eff
+
+ZYnpc_AoB2_skill_1_eff
+
+ZYnpc_AoB2_skill_2_eff
+
+ZYnpc_AoB2_skill_2_over_eff
+
+ZYnpc_AoB2_skill_3_buff_eff
+
+ZYnpc_AoB2_skill_3_debuff_eff
+
+ZYnpc_AoB2_skill_3_eff
+
+ZYnpc_HouCHZ_hit_eff
+ 
+ZYnpc_HouCHZ_skill_1_begin_eff
+
+ZYnpc_HouCHZ_skill_01_eff
+
+ZYnpc_HouCHZ_skill_1_over_eff
+
+ZYnpc_ShiWZG_hit_eff
+
+ZYnpc_ShiWZG_skill_01_eff
+
+ZYnpc_ShiWZG_skill_1_eff
+
+ZYnpc_ShiWZG_skill_1_YJ_eff
+
+ZYnpc_WangFGJ_skill_1_YJ_eff
+
+ZYnpc_WangFGJ_hit_eff
+
+ZYnpc_WangFGJ_skill_1_1_eff
+
+ZYnpc_WangFGJ_skill_1_2_eff
+
+ZYnpc_WangFGJ_skill_01_eff
+
+ZYcha_CLF_CN
+
+ZYcha_CLF_CN_Text
+ 
+ZYcha_CLF_CN@Skill_3_eff01_Hit
+
+ZYcha_CLF_CN@Skill_3_eff01_LD
+ 
+ZYcha_CLF_CN@Skill_3_eff01_NLD
+(
+&ZYcha_CLF_CN@Skill_3_eff01_NLD_weapon2
+#
+!ZYcha_CLF_CN@Skill_3_eff01_Debuff
+-
++ZYcha_CLF_CN@Skill_3_Sing_eff01_NLD_weapon2
+"
+ ZYcha_CLF_CN@Skill_12_eff01_Buff
+!
+ZYcha_CLF_CN@Skill_12_eff01_Hit
+ 
+ZYcha_CLF_CN@Skill_12_eff01_LD
+!
+ZYcha_CLF_CN@Skill_12_eff01_NLD
+)
+'ZYcha_CLF_CN@Skill_12_eff01_NLD_weapon2

@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: m_sky_blue
+  m_Shader: {fileID: 4800000, guid: b0e1f05e4ec871d4bb51446bddbb0852, type: 3}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: ef7bcdf56961286448af62d3d25993f2, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _DetailTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 9e1f77a8029d4a44eb2816c6a4d24003, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _ScrollX
+        second: .0199999996
+      data:
+        first:
+          name: _Scroll2X
+        second: .100000001
+      data:
+        first:
+          name: _AMultiplier
+        second: 1
+      data:
+        first:
+          name: _ScrollY
+        second: 0
+      data:
+        first:
+          name: _Scroll2Y
+        second: 0
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: .5031358, g: .582242548, b: .691176474, a: 1}

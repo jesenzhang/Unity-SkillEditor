@@ -1,0 +1,208 @@
+fileFormatVersion: 2
+guid: f8222290142ae8d43ac88c39ee035123
+timeCreated: 1492153660
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: water001
+    100002: //RootNode
+    100004: ZYbui_CLF_chuan002
+    100006: ZYbui_CLF_ditai004
+    100008: ZYbui_CLF_ditai005
+    100010: ZYbui_CLF_ditai006
+    100012: ZYbui_CLF_huxinting002
+    100014: ZYbui_CLF_jiaolou004
+    100016: ZYbui_CLF_jiaolou005
+    100018: ZYbui_CLF_jiaolou006
+    100020: ZYbui_CLF_louti004
+    100022: ZYbui_CLF_louti005
+    100024: ZYbui_CLF_louti006
+    100026: ZYbui_CLF_paifang009
+    100028: ZYbui_CLF_paifang010
+    100030: ZYbui_CLF_paifang011
+    100032: ZYbui_CLF_paifang012
+    100034: ZYbui_CLF_paifang013
+    100036: ZYbui_CLF_paifang014
+    100038: ZYbui_CLF_paifang015
+    100040: ZYbui_CLF_paifang016
+    100042: ZYbui_CLF_tingzi003
+    100044: ZYbui_CLF_tingzi004
+    100046: ZYbui_CLF_weiqiang003
+    100048: ZYbui_CLF_weiqiang004
+    100050: ZYbui_CLF_xianjieqiao002
+    100052: ZYbui_CLF_zhujian002
+    100054: ZYbui_CLF_zhujianlouti002
+    400000: water001
+    400002: //RootNode
+    400004: ZYbui_CLF_chuan002
+    400006: ZYbui_CLF_ditai004
+    400008: ZYbui_CLF_ditai005
+    400010: ZYbui_CLF_ditai006
+    400012: ZYbui_CLF_huxinting002
+    400014: ZYbui_CLF_jiaolou004
+    400016: ZYbui_CLF_jiaolou005
+    400018: ZYbui_CLF_jiaolou006
+    400020: ZYbui_CLF_louti004
+    400022: ZYbui_CLF_louti005
+    400024: ZYbui_CLF_louti006
+    400026: ZYbui_CLF_paifang009
+    400028: ZYbui_CLF_paifang010
+    400030: ZYbui_CLF_paifang011
+    400032: ZYbui_CLF_paifang012
+    400034: ZYbui_CLF_paifang013
+    400036: ZYbui_CLF_paifang014
+    400038: ZYbui_CLF_paifang015
+    400040: ZYbui_CLF_paifang016
+    400042: ZYbui_CLF_tingzi003
+    400044: ZYbui_CLF_tingzi004
+    400046: ZYbui_CLF_weiqiang003
+    400048: ZYbui_CLF_weiqiang004
+    400050: ZYbui_CLF_xianjieqiao002
+    400052: ZYbui_CLF_zhujian002
+    400054: ZYbui_CLF_zhujianlouti002
+    2300000: water001
+    2300002: ZYbui_CLF_chuan002
+    2300004: ZYbui_CLF_ditai004
+    2300006: ZYbui_CLF_ditai005
+    2300008: ZYbui_CLF_ditai006
+    2300010: ZYbui_CLF_huxinting002
+    2300012: ZYbui_CLF_jiaolou004
+    2300014: ZYbui_CLF_jiaolou005
+    2300016: ZYbui_CLF_jiaolou006
+    2300018: ZYbui_CLF_louti004
+    2300020: ZYbui_CLF_louti005
+    2300022: ZYbui_CLF_louti006
+    2300024: ZYbui_CLF_paifang009
+    2300026: ZYbui_CLF_paifang010
+    2300028: ZYbui_CLF_paifang011
+    2300030: ZYbui_CLF_paifang012
+    2300032: ZYbui_CLF_paifang013
+    2300034: ZYbui_CLF_paifang014
+    2300036: ZYbui_CLF_paifang015
+    2300038: ZYbui_CLF_paifang016
+    2300040: ZYbui_CLF_tingzi003
+    2300042: ZYbui_CLF_tingzi004
+    2300044: ZYbui_CLF_weiqiang003
+    2300046: ZYbui_CLF_weiqiang004
+    2300048: ZYbui_CLF_xianjieqiao002
+    2300050: ZYbui_CLF_zhujian002
+    2300052: ZYbui_CLF_zhujianlouti002
+    3300000: water001
+    3300002: ZYbui_CLF_chuan002
+    3300004: ZYbui_CLF_ditai004
+    3300006: ZYbui_CLF_ditai005
+    3300008: ZYbui_CLF_ditai006
+    3300010: ZYbui_CLF_huxinting002
+    3300012: ZYbui_CLF_jiaolou004
+    3300014: ZYbui_CLF_jiaolou005
+    3300016: ZYbui_CLF_jiaolou006
+    3300018: ZYbui_CLF_louti004
+    3300020: ZYbui_CLF_louti005
+    3300022: ZYbui_CLF_louti006
+    3300024: ZYbui_CLF_paifang009
+    3300026: ZYbui_CLF_paifang010
+    3300028: ZYbui_CLF_paifang011
+    3300030: ZYbui_CLF_paifang012
+    3300032: ZYbui_CLF_paifang013
+    3300034: ZYbui_CLF_paifang014
+    3300036: ZYbui_CLF_paifang015
+    3300038: ZYbui_CLF_paifang016
+    3300040: ZYbui_CLF_tingzi003
+    3300042: ZYbui_CLF_tingzi004
+    3300044: ZYbui_CLF_weiqiang003
+    3300046: ZYbui_CLF_weiqiang004
+    3300048: ZYbui_CLF_xianjieqiao002
+    3300050: ZYbui_CLF_zhujian002
+    3300052: ZYbui_CLF_zhujianlouti002
+    4300000: water001
+    4300002: ZYbui_CLF_tingzi003
+    4300004: ZYbui_CLF_zhujian002
+    4300006: ZYbui_CLF_zhujianlouti002
+    4300008: ZYbui_CLF_chuan002
+    4300010: ZYbui_CLF_jiaolou004
+    4300012: ZYbui_CLF_xianjieqiao002
+    4300014: ZYbui_CLF_paifang009
+    4300016: ZYbui_CLF_paifang010
+    4300018: ZYbui_CLF_paifang011
+    4300020: ZYbui_CLF_louti004
+    4300022: ZYbui_CLF_huxinting002
+    4300024: ZYbui_CLF_ditai004
+    4300026: ZYbui_CLF_louti005
+    4300028: ZYbui_CLF_paifang012
+    4300030: ZYbui_CLF_ditai005
+    4300032: ZYbui_CLF_paifang016
+    4300034: ZYbui_CLF_paifang013
+    4300036: ZYbui_CLF_jiaolou005
+    4300038: ZYbui_CLF_tingzi004
+    4300040: ZYbui_CLF_louti006
+    4300042: ZYbui_CLF_paifang014
+    4300044: ZYbui_CLF_ditai006
+    4300046: ZYbui_CLF_jiaolou006
+    4300048: ZYbui_CLF_paifang015
+    4300050: ZYbui_CLF_weiqiang004
+    4300052: ZYbui_CLF_weiqiang003
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
