@@ -4,6 +4,12 @@ using System;
 using UnityEditor;
 namespace CySkillEditor
 {
+    public enum ModelTargetType
+    {
+        Player = 0,
+        NPC = 1
+    }
+
     [Serializable]
     public class JSkillUnit
     {
@@ -106,20 +112,96 @@ namespace CySkillEditor
                 {
                    return (SkillAreaRand)_skillObj;
                 }
+                coverToObj();
                 return _skillObj;
             }
             set {
                 _skillObj = value;
+                coverToString();
+
             }
         }
         // 	技能引导策略
         public SkillGuidePolicy guidePolicy;
 
+        public string SkillData = "";
         private void OnEnable()
         {
             guidePolicy = new SkillGuidePolicy();
         }
 
+        private void coverToString()
+        {
+            if (_skillObj is SkillLine)
+            {
+                SkillData = JsonUtility.ToJson((SkillLine)_skillObj);
+            }
+            if (_skillObj is SkillMultiLine)
+            {
+                SkillData = JsonUtility.ToJson((SkillMultiLine)_skillObj);
+            }
+            if (_skillObj is SkillJump)
+            {
+                SkillData = JsonUtility.ToJson((SkillJump)_skillObj);
+            }
+            if (_skillObj is SkillHelix)
+            {
+                SkillData = JsonUtility.ToJson((SkillHelix)_skillObj);
+            }
+            if (_skillObj is SkillFollow)
+            {
+                SkillData = JsonUtility.ToJson((SkillFollow)_skillObj);
+            }
+            if (_skillObj is SkillBackStab)
+            {
+                SkillData = JsonUtility.ToJson((SkillBackStab)_skillObj);
+            }
+            if (_skillObj is SkillArea)
+            {
+                SkillData = JsonUtility.ToJson((SkillArea)_skillObj);
+            }
+            if (_skillObj is SkillAreaRand)
+            {
+                SkillData = JsonUtility.ToJson((SkillAreaRand)_skillObj);
+            }
+
+        }
+        private void coverToObj()
+        {
+            if (launchType == LaunchType.SINGLELINE)
+            {
+                _skillObj = JsonUtility.FromJson<SkillLine>(SkillData);
+            }
+            if (launchType == LaunchType.MULLINE)
+            {
+                _skillObj = JsonUtility.FromJson<SkillMultiLine>(SkillData);
+            }
+            if (launchType == LaunchType.JUMP)
+            {
+                _skillObj = JsonUtility.FromJson<SkillJump>(SkillData);
+            }
+            if (launchType == LaunchType.HELIX)
+            {
+                _skillObj = JsonUtility.FromJson<SkillHelix>(SkillData);
+            }
+            if (launchType == LaunchType.FOLLOW)
+            {
+                _skillObj = JsonUtility.FromJson<SkillFollow>(SkillData);
+            }
+            if (launchType == LaunchType.BACK_STAB)
+            {
+                _skillObj = JsonUtility.FromJson<SkillBackStab>(SkillData);
+            }
+            if (launchType == LaunchType.AREA)
+            {
+                _skillObj = JsonUtility.FromJson<SkillArea>(SkillData);
+            }
+            if (launchType == LaunchType.AREA_RANDSKILL)
+            {
+                _skillObj = JsonUtility.FromJson<SkillAreaRand>(SkillData);
+            }
+
+        }
         public JSkillUnit Copy()
         {
             JSkillUnit b = new JSkillUnit();
@@ -131,6 +213,7 @@ namespace CySkillEditor
             b.skillTime = skillTime;
             b.distance = distance;
             b.targetType = targetType;
+            b.SkillData = SkillData;
             if (skillObj is SkillLine)
             {
                 b.skillObj = ((SkillLine)skillObj).Copy();

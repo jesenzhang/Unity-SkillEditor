@@ -101,13 +101,13 @@ public class TLS_Water : MonoBehaviour
 			
 			reflectionCamera.cullingMask = ~(1 << 4) & m_ReflectLayers.value; // never render water layer
 			reflectionCamera.targetTexture = m_ReflectionTexture;
-			GL.SetRevertBackfacing (true);
+			GL.invertCulling = true;
 			reflectionCamera.transform.position = newpos;
 			Vector3 euler = cam.transform.eulerAngles;
 			reflectionCamera.transform.eulerAngles = new Vector3 (-euler.x, euler.y, euler.z);
 			reflectionCamera.Render ();
 			reflectionCamera.transform.position = oldpos;
-			GL.SetRevertBackfacing (false);
+			GL.invertCulling = false;
 			GetComponent<Renderer>().sharedMaterials [0].SetTexture ("_ReflectionTex", m_ReflectionTexture);
 			if (GetComponent<Renderer>().sharedMaterials.Length > 1) {
 				GetComponent<Renderer>().sharedMaterials [1].SetTexture ("_ReflectionTex", m_ReflectionTexture);
@@ -358,7 +358,7 @@ public class TLS_Water : MonoBehaviour
 	
 	private WaterMode FindHardwareWaterSupport ()
 	{
-		if (!SystemInfo.supportsRenderTextures || !GetComponent<Renderer>())
+		if (!GetComponent<Renderer>())
 			return WaterMode.Simple;
 
 

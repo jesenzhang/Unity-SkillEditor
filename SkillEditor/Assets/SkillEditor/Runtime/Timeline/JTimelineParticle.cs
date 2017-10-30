@@ -73,7 +73,7 @@ namespace CySkillEditor
                     {
                         if (pp == ppp.name)
                         {
-                            duration = duration < ppp.duration ? ppp.duration : duration;
+                            duration = duration < ppp.main.duration ? ppp.main.duration : duration;
                         }
                     }
                 }
@@ -118,7 +118,7 @@ namespace CySkillEditor
 
         public override TimeLineType LineType()
         {
-            return TimeLineType.Effect;
+            return TimeLineType.Particle;
         }
 
 
@@ -199,8 +199,6 @@ namespace CySkillEditor
                     for (int allClipIndex = 0; allClipIndex < allClips.Count; allClipIndex++)
                     {
                         var clip = allClips[allClipIndex];
-                        int index = GetIndexWithName(clip.ParticleName);
-
                         if (!JParticleClipData.IsClipRunning(runningTotalTime, clip) && !clip.Looping)
                         {
                             if (clip.active)

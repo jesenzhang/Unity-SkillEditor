@@ -656,43 +656,6 @@ namespace CySkillEditor
                 container = CreateNewTimelineContainer(affectedObject);
             }
 
-            Animator A = affectedObject.GetComponent<Animator>();
-            if (A != null)
-            {
-                JTimelineAnimation janimation = (JTimelineAnimation)container.AddNewTimeline(TimeLineType.Animation);
-                linelist.Add(janimation);
-                var track = ScriptableObject.CreateInstance<JAnimationTrack>();
-                janimation.AddTrack(track);
-            }
-
-            ParticleSystem P = affectedObject.GetComponent<ParticleSystem>();
-            ParticleSystem[] Plist = affectedObject.GetComponentsInChildren<ParticleSystem>();
-
-            if (P != null || (Plist != null && Plist.Length > 0))
-            {
-                JTimelineParticle jparticle = (JTimelineParticle)container.AddNewTimeline(TimeLineType.Effect);
-                linelist.Add(jparticle);
-                var track = ScriptableObject.CreateInstance<JParticleTrack>();
-                jparticle.AddTrack(track);
-            }
-
-            AudioSource S = affectedObject.GetComponent<AudioSource>();
-            if (S != null)
-            {
-                JTimelineSound janimation = (JTimelineSound)container.AddNewTimeline(TimeLineType.Sound);
-                linelist.Add(janimation);
-                var track = ScriptableObject.CreateInstance<JSoundTrack>();
-                janimation.AddTrack(track);
-            }
-            Transform T = affectedObject.GetComponent<Transform>();
-            if (T != null)
-            {
-                JTimelineTransform janimation = (JTimelineTransform)container.AddNewTimeline(TimeLineType.Transform);
-                linelist.Add(janimation);
-                var track = ScriptableObject.CreateInstance<JTransformTrack>();
-                janimation.AddTrack(track);
-                janimation.Build();
-            }
             return linelist;
         }
 

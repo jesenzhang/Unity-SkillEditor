@@ -16,8 +16,6 @@ namespace CySkillEditor
         [SerializeField]
         public SkillEffectUnit effectunit;
 
- 
-
         [SerializeField]
         private float startTime;
         public float StartTime

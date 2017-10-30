@@ -42,6 +42,31 @@ namespace CySkillEditor
         Vector2 unitEffectScrollPos = new Vector2(0, 0);
         private ReorderableList unitEffectList;
 
+        //uniteffect数组
+        Vector2 tipEffectScrollPos = new Vector2(0, 0);
+        private ReorderableList tipEffectList;
+
+        //uniteffect数组
+        Vector2 endEffectScrollPos = new Vector2(0, 0);
+        private ReorderableList endEffectList;
+
+        //uniteffect数组
+        Vector2 hitEffectScrollPos = new Vector2(0, 0);
+        private ReorderableList hitEffectList;
+
+
+        //beginCameraList
+        Vector2 beginCameraScrollPos = new Vector2(0, 0);
+        private ReorderableList beginCameraList;
+
+        //movingCameraList
+        Vector2 movingCameraScrollPos = new Vector2(0, 0);
+        private ReorderableList movingCameraList;
+
+        //hitCameraList
+        Vector2 hitCameraScrollPos = new Vector2(0, 0);
+        private ReorderableList hitCameraList;
+
 
         //skillunit列表
         Vector2 unitScrollPos = new Vector2(0, 0);
@@ -56,6 +81,15 @@ namespace CySkillEditor
         //列表选择标记
         int SelectSkillUnit = 0;
         int SelectSkillArt = 0;
+
+        bool showUnit = true;
+        bool showBeginEffect = true;
+        bool showTipEffect = true;
+        bool showEndEffect = true;
+        bool showHitEffect = true;
+        bool showBeginCamera = true;
+        bool showMoveCamera = true;
+        bool showHitCamera = true;
 
         //根据模型类型 加载FBX
         private void LoadFbx()
@@ -77,9 +111,12 @@ namespace CySkillEditor
             SkillArt skillart = EditorDataContainer.currentskillAssetData.skillArt;
             string modelName = "";
             modelName = skillart.modelName;
-            RuntimeAnimatorController controller = AssetUtility.GetAnimationCtl(skillart.modelType, modelName, skillart.animationController);
+            RuntimeAnimatorController controller0 = AssetUtility.GetAnimationCtl(skillart.modelType, skillart.modelName, skillart.animationController);
+            if (skillart.animationControllerObj == null && controller0 != null)
+                skillart.animationControllerObj = controller0;
+            RuntimeAnimatorController controller = skillart.animationControllerObj;// AssetUtility.GetAnimationCtl(skillart.modelType, modelName, skillart.animationController);
             if (force && controller == null)
-                EditorUtility.DisplayDialog("Error!", "Error animationController Not Found", "OK");
+                Debug.Log("Error! Error animationController Not Found");
             if (controller != null)
             {
                 if (force)
@@ -125,132 +162,6 @@ namespace CySkillEditor
                 }
             }
         }
-        private string GetSkillStringById(int id)
-        {
-            return EditorDataContainer.GetSkillStringById(id);
-        }
-        private int GetSkillIdByString(string id)
-        {
-            return EditorDataContainer.GetSkillIdByString(id);
-        }
-        private string GetStringById(int id)
-        {
-            return EditorDataContainer.GetStringById(id);
-        }
-        private int GetIdByString(string id)
-        {
-            return EditorDataContainer.GetIdByString(id);
-        }
-        
-        //绘制特效的配置
-        public void DrawEffectConfigure(EffectConfigure effect)
-        {
-            EditorGUILayout.BeginVertical();
-            EditorGUILayout.LabelField("  特效配置：");
-            effect.posType = (CySkillEditor.EffectConfigure.PosType)EditorGUILayout.Popup("  posType", (int)effect.posType, Enum.GetNames(typeof(CySkillEditor.EffectConfigure.PosType)));
-            effect.effectName = EditorGUILayout.TextField("  effectName", effect.effectName);
-            if (effect.posType == CySkillEditor.EffectConfigure.PosType.BODY)
-            {
-                effect.bodyHeight = EditorGUILayout.FloatField("  bodyHeight", effect.bodyHeight);
-            }
-            else
-            if (effect.posType == CySkillEditor.EffectConfigure.PosType.HEAD)
-            {
-                effect.headHeight = EditorGUILayout.FloatField("  headHeight",effect.headHeight);
-            }
-            else
-            if (effect.posType == CySkillEditor.EffectConfigure.PosType.BONE)
-            {
-                effect.boneName = EditorGUILayout.TextField("  boneName", "" + effect.boneName);
-            }
-            else
-            if (effect.posType == CySkillEditor.EffectConfigure.PosType.BODY)
-            {
-                effect.bodyHeight = EditorGUILayout.FloatField("  bodyHeight", effect.bodyHeight);
-            }
-            else
-            if (effect.posType == CySkillEditor.EffectConfigure.PosType.FEET)
-            {
-                effect.feetWidth = EditorGUILayout.FloatField("  feetWidth", effect.feetWidth);
-            }
-            effect.position = EditorGUILayout.Vector3Field("  position", effect.position);
-            effect.rotation = EditorGUILayout.Vector3Field("  rotation", effect.rotation);
-            effect.lifeTime = (CySkillEditor.EffectConfigure.LifeTime)EditorGUILayout.Popup("  lifeTime", (int)effect.lifeTime, Enum.GetNames(typeof(CySkillEditor.EffectConfigure.LifeTime)));
-            EditorGUILayout.EndVertical();
-        }
-        //绘制一个特效单位
-        public void DrawSkillEffectUnit(SkillEffectUnit Art, List<string> Poplist, List<GameObject> Objlist)
-        {
-            EditorGUILayout.BeginVertical();
-            EditorGUILayout.BeginHorizontal();
-            GameObject effect = null;
-            int selet = -1;
-            if (Art.artEffect.effectObj != null)
-            {
-                effect = Art.artEffect.effectObj;
-                string effecttname = Art.artEffect.effectObj.name;
-                if (Poplist.Contains(effecttname))
-                {
-                    selet = Poplist.IndexOf(effecttname);
-                    effect = Objlist[selet];
-                }
-            }
-            GameObject neweffect = (GameObject)EditorGUILayout.ObjectField("  unitEffect:", effect, typeof(GameObject), true);
-            int newselect = EditorGUILayout.Popup(selet, Poplist.ToArray());
-            if (newselect != selet)
-            {
-                Art.artEffect.effect = GetIdByString(Poplist[newselect]);
-                Art.artEffect.effectObj = Objlist[newselect];
-            }
-            if (neweffect != effect)
-            {
-                Art.artEffect.effectObj = neweffect;
-                string effecttname = Art.artEffect.effectObj.name;
-            }
-            GUILayout.EndHorizontal();
-            Art.artEffect.beginTime = EditorGUILayout.IntField("  beginTime:",  Art.artEffect.beginTime);
-            Art.artEffect.phaseTime = EditorGUILayout.IntField("  phaseTime:", Art.artEffect.phaseTime);
-            Art.artEffect.height = EditorGUILayout.FloatField("  height:", Art.artEffect.height);
-            Art.artEffect.effPos = (SkillArtEffect.EffPos)EditorGUILayout.Popup("  effPos:", (int)Art.artEffect.effPos, Enum.GetNames(typeof(SkillArtEffect.EffPos)));
-            DrawEffectConfigure(Art.configure);
-            EditorGUILayout.EndVertical();
-        }
-        //绘制特效列表
-        public void DrawEffectUnitList(List<SkillEffectUnit> beginEffect, Vector2 beginScrollPos, out Vector2 oScrollPos,float width, ref ReorderableList beginEffectList, List<string> Poplist, List<GameObject> Objlist)
-        {
-            EditorGUILayout.BeginVertical();
-            //起手动作特效
-            oScrollPos = EditorGUILayout.BeginScrollView(beginScrollPos);
-            if (beginEffectList == null)
-            {
-                // 加入数据数组
-                beginEffectList = new ReorderableList(beginEffect, typeof(SkillEffectUnit), false, false, true, true);
-            }
-            beginEffectList.elementHeight = 250;
-            if (beginEffect == null || beginEffect.Count == 0)
-                beginEffectList.elementHeight = 20;
-            // 绘制Item显示列表
-            beginEffectList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-            {
-                SkillEffectUnit element = (SkillEffectUnit)beginEffect[index];
-                Rect drawRect = new Rect(rect.x, rect.y + 20, width-30, 230);
-                GUILayout.BeginArea(drawRect);
-                GUILayout.Label("index: " + index);
-                DrawSkillEffectUnit(element, Poplist, Objlist);
-                GUILayout.EndArea();
-            };
-            beginEffectList.onRemoveCallback = (ReorderableList l) =>
-            {
-                l.list.RemoveAt(l.index);
-            };
-            beginEffectList.onAddCallback = (ReorderableList l) =>
-            {
-                l.list.Add(new SkillEffectUnit());
-            };
-            beginEffectList.DoLayoutList();
-            EditorGUILayout.EndScrollView();
-            EditorGUILayout.EndVertical();
-        }
         //绘制特效信息
         public void DrawSkillArtEffect(SkillArt skillart,float width)
         {
@@ -258,12 +169,12 @@ namespace CySkillEditor
             EditorGUILayout.LabelField("Skill ArtEffect: 特效");
             //id
             if (skillart.idString == "")
-                skillart.idString = GetSkillStringById(skillart.id);
+                skillart.idString = EditorDrawUtility.GetSkillStringById(skillart.id);
             string id = EditorGUILayout.TextField("Id:", skillart.idString);
             if (id != skillart.idString)
             {
                 skillart.idString = id;
-                skillart.id = GetSkillIdByString(id);
+                skillart.id = EditorDrawUtility.GetSkillIdByString(id);
             }
             //modelType
             int typeindex = (int)skillart.modelType;
@@ -316,68 +227,158 @@ namespace CySkillEditor
                     LoadEffect();
                 }
             }
-            string newcontroller = EditorGUILayout.TextField("animationController:", skillart.animationController);
-            if (newcontroller != skillart.animationController)
+            EditorGUILayout.TextField("animationControllerName:", skillart.animationController);
+            RuntimeAnimatorController controller = AssetUtility.GetAnimationCtl(skillart.modelType, skillart.modelName, skillart.animationController);
+         
+            if (skillart.animationControllerObj == null && controller != null)
+                skillart.animationControllerObj = controller;
+
+            RuntimeAnimatorController newcontroller = (RuntimeAnimatorController)EditorGUILayout.ObjectField("AnimatorController:", skillart.animationControllerObj, typeof(RuntimeAnimatorController), true);
+
+            if (newcontroller != controller)
             {
-                skillart.animationController = newcontroller;
+                skillart.animationController = newcontroller.name;
+                skillart.animationControllerObj = newcontroller;
                 LoadAnimationState();
             }
+          
             EditorGUILayout.LabelField("GuideAction 开始动作:");
             skillart.guideFadeTime = EditorGUILayout.FloatField("  guideFadeTime:", skillart.guideFadeTime);
             EditorDrawUtility.DrawActionRect("  guideAction:", skillart.guideAction, out skillart.guideAction, stateNamelist);
             EditorDrawUtility.DrawActionRect("  guidingAction:", skillart.guidingAction, out skillart.guidingAction, stateNamelist);
             EditorDrawUtility.DrawActionRect("  endAction:", skillart.endAction, out skillart.endAction, stateNamelist);
-         
-            EditorGUILayout.LabelField("unitEffect 弹道特效:");
-            if (skillart.unitEffect != null)
+
+           
+            showBeginEffect = EditorGUILayout.Foldout(showBeginEffect, "beginEffect 起手特效:");
+            //EditorGUILayout.LabelField("beginEffect 起手特效:");
+            if (showBeginEffect)
             {
-                DrawEffectUnitList(skillart.unitEffect, unitEffectScrollPos, out unitEffectScrollPos, width, ref unitEffectList, effectNamelist, SkillEffectPrefabs);
-            }
-            else
-            {
-                if (GUILayout.Button("Add unitEffectList"))
+                if (skillart.beginEffect != null)
                 {
-                    skillart.unitEffect = new List<SkillEffectUnit>();
+                    EditorDrawUtility.DrawEffectUnitList(skillart.beginEffect, beginScrollPos, out beginScrollPos, width, ref beginEffectList, effectNamelist, SkillEffectPrefabs);
+                }
+                else
+                {
+                    if (GUILayout.Button("Add beginEffectList"))
+                    {
+                        skillart.beginEffect = new List<SkillEffectUnit>();
+                    }
                 }
             }
-            EditorGUILayout.LabelField("beginEffect 起手特效:");
-            if (skillart.beginEffect != null)
+            showEndEffect = EditorGUILayout.Foldout(showEndEffect, "endEffect 结束特效:");
+            // EditorGUILayout.LabelField("tipEffect 警告特效:");
+            if (showEndEffect)
             {
-                DrawEffectUnitList(skillart.beginEffect, beginScrollPos, out beginScrollPos, width, ref beginEffectList, effectNamelist, SkillEffectPrefabs);
-            }
-            else
-            {
-                if (GUILayout.Button("Add beginEffectList"))
+                if (skillart.endEffect != null)
                 {
-                    skillart.beginEffect = new List<SkillEffectUnit>();
+                    EditorDrawUtility.DrawEffectUnitList(skillart.endEffect, endEffectScrollPos, out endEffectScrollPos, width, ref endEffectList, effectNamelist, SkillEffectPrefabs);
+                }
+                else
+                {
+                    if (GUILayout.Button("Add endEffectList"))
+                    {
+                        skillart.endEffect = new List<SkillEffectUnit>();
+                    }
                 }
             }
-            EditorGUILayout.LabelField("beginCameraAction 开始相机特效:");
-            if (skillart.beginCameraAction != null)
-                EditorDrawUtility.DrawCameraAction(skillart.beginCameraAction);
-            else
-                if (GUILayout.Button("Add beginCameraAction 开始相机特效"))
+            showUnit = EditorGUILayout.Foldout(showUnit, "unitEffect 弹道特效:");
+            //EditorGUILayout.LabelField("unitEffect 弹道特效:");
+            if (showUnit)
             {
-                skillart.beginCameraAction = new SkillCameraAction();
+                if (skillart.unitEffect != null)
+                {
+                    EditorDrawUtility.DrawEffectUnitList(skillart.unitEffect, unitEffectScrollPos, out unitEffectScrollPos, width, ref unitEffectList, effectNamelist, SkillEffectPrefabs);
+                }
+                else
+                {
+                    if (GUILayout.Button("Add unitEffectList"))
+                    {
+                        skillart.unitEffect = new List<SkillEffectUnit>();
+                    }
+                }
             }
-            EditorGUILayout.LabelField("moveCameraAction 移动相机特效:");
-            if (skillart.moveCameraAction != null)
-                EditorDrawUtility.DrawCameraAction(skillart.moveCameraAction);
-            else
-              if (GUILayout.Button("Add moveCameraAction 移动相机特效"))
+           
+            showTipEffect = EditorGUILayout.Foldout(showTipEffect, "tipEffect 警告特效:");
+            // EditorGUILayout.LabelField("tipEffect 警告特效:");
+            if (showTipEffect)
             {
-                skillart.moveCameraAction = new SkillCameraAction();
+                if (skillart.tipEffect != null)
+                {
+                    EditorDrawUtility.DrawEffectUnitList(skillart.tipEffect, tipEffectScrollPos, out tipEffectScrollPos, width, ref tipEffectList, effectNamelist, SkillEffectPrefabs);
+                }
+                else
+                {
+                    if (GUILayout.Button("Add tipEffectList"))
+                    {
+                        skillart.tipEffect = new List<SkillEffectUnit>();
+                    }
+                }
             }
+            showHitEffect = EditorGUILayout.Foldout(showHitEffect, "hitEffect 击中特效:");
+            // EditorGUILayout.LabelField("tipEffect 警告特效:");
+            if (showHitEffect)
+            {
+                if (skillart.hitEffect != null)
+                {
+                    EditorDrawUtility.DrawEffectUnitList(skillart.hitEffect, hitEffectScrollPos, out hitEffectScrollPos, width, ref hitEffectList, effectNamelist, SkillEffectPrefabs);
+                }
+                else
+                {
+                    if (GUILayout.Button("Add hitEffectList"))
+                    {
+                        skillart.tipEffect = new List<SkillEffectUnit>();
+                    }
+                }
+            }
+            showBeginCamera = EditorGUILayout.Foldout(showBeginCamera, "beginCameraAction 开始相机特效:");
 
-            EditorGUILayout.LabelField("hitCameraAction 命中相机特效:");
-            if (skillart.hitCameraAction != null)
-                EditorDrawUtility.DrawCameraAction(skillart.hitCameraAction);
-            else
-           if (GUILayout.Button("Add hitCameraAction 命中相机特效"))
+            //EditorGUILayout.LabelField("beginCameraAction 开始相机特效:");
+            if (showBeginCamera)
             {
-                skillart.hitCameraAction = new SkillCameraAction();
+                if (skillart.beginCameraAction != null)
+                {
+                    EditorDrawUtility.DrawCameraActionList(skillart.beginCameraAction, beginCameraScrollPos, out beginCameraScrollPos, width, ref beginCameraList);
+                }
+                else
+                {
+                    if (GUILayout.Button("Add beginCameraActionList"))
+                    {
+                        skillart.beginCameraAction = new List<SkillCameraAction>();
+                    }
+                }
             }
-
+            showMoveCamera = EditorGUILayout.Foldout(showMoveCamera, "moveCameraAction 移动相机特效:");
+            if (showMoveCamera)
+            {
+                //EditorGUILayout.LabelField("moveCameraAction 移动相机特效:");
+                if (skillart.moveCameraAction != null)
+                {
+                    EditorDrawUtility.DrawCameraActionList(skillart.moveCameraAction, movingCameraScrollPos, out movingCameraScrollPos, width, ref movingCameraList);
+                }
+                else
+                {
+                    if (GUILayout.Button("Add moveCameraActionList"))
+                    {
+                        skillart.moveCameraAction = new List<SkillCameraAction>();
+                    }
+                }
+            }
+            showHitCamera = EditorGUILayout.Foldout(showHitCamera, "hitCameraAction 命中相机特效:");
+            if (showHitCamera)
+            {
+               // EditorGUILayout.LabelField("hitCameraAction 命中相机特效:");
+                if (skillart.hitCameraAction != null)
+                {
+                    EditorDrawUtility.DrawCameraActionList(skillart.hitCameraAction, hitCameraScrollPos, out hitCameraScrollPos, width, ref hitCameraList);
+                }
+                else
+                {
+                    if (GUILayout.Button("Add hitCameraActionList"))
+                    {
+                        skillart.hitCameraAction = new List<SkillCameraAction>();
+                    }
+                }
+            }
             EditorGUILayout.EndVertical();
         }
         private void DrawUnitList(float width)
@@ -400,7 +401,7 @@ namespace CySkillEditor
                 Rect drawRect = new Rect(rect.x, rect.y + 20, width-30, 600);
                 GUILayout.BeginArea(drawRect);
                 GUILayout.Label("index: " + index);
-                DrawSkillUnit(DataConvert.ConvertSkillUnit(element));
+                EditorDrawUtility.DrawSkillUnit(DataConvert.ConvertSkillUnit(element));
                 GUILayout.EndArea();
                 EditorGUILayout.Separator();
             };
@@ -419,7 +420,7 @@ namespace CySkillEditor
             EditorGUILayout.EndScrollView();
             GUILayout.EndVertical();
         }
-        private void DrawSkillArtList()
+        private void DrawSkillArtList(float width)
         {
             GUILayout.BeginVertical("Box");
             EditorGUILayout.LabelField("SkillArtEffect List");
@@ -427,7 +428,7 @@ namespace CySkillEditor
             LoadEffect();
             // 设置保存文件名字
             List<SkillUnit.SkillArt> skillart = EditorDataContainer.allSkillUnits.arts;
-            artScrollPos = EditorGUILayout.BeginScrollView(artScrollPos, GUILayout.MaxWidth(350));
+            artScrollPos = EditorGUILayout.BeginScrollView(artScrollPos);
             //列表
             if (artList == null)
             {
@@ -437,46 +438,56 @@ namespace CySkillEditor
             // 绘制Item显示列表
             artList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
             {
-                float titlewid = 100;
                 SkillUnit.SkillArt element = skillart[index];
-                rect.y += 2;
-                EditorGUI.LabelField(new Rect(rect.x, rect.y, titlewid, EditorGUIUtility.singleLineHeight), "Id:" + " " + element.id);
-                EditorGUI.TextField(new Rect(rect.x + titlewid + 5, rect.y, rect.width - titlewid, EditorGUIUtility.singleLineHeight), "" + EditorDataContainer.GetSkillStringById(element.id));
-                EditorGUI.LabelField(new Rect(rect.x, rect.y + 20, titlewid, EditorGUIUtility.singleLineHeight), "guideFadeTime:");
-                element.guideFadeTime =EditorGUI.FloatField(new Rect(rect.x + titlewid + 5, rect.y + 20, rect.width - titlewid, EditorGUIUtility.singleLineHeight), element.guideFadeTime);
-
-                EditorGUI.LabelField(new Rect(rect.x, rect.y + 40, titlewid, EditorGUIUtility.singleLineHeight), "guideAction:");
-                EditorGUI.TextField(new Rect(rect.x + titlewid + 5, rect.y + 40, rect.width - titlewid, EditorGUIUtility.singleLineHeight), element.guideAction);
-
-                EditorGUI.LabelField(new Rect(rect.x, rect.y + 60, titlewid, EditorGUIUtility.singleLineHeight), "guidingAction:");
-                EditorGUI.TextField(new Rect(rect.x + titlewid + 5, rect.y + 60, rect.width - titlewid, EditorGUIUtility.singleLineHeight), element.guidingAction);
-
-                EditorGUI.LabelField(new Rect(rect.x, rect.y + 80, titlewid, EditorGUIUtility.singleLineHeight), "endAction:");
-                EditorGUI.TextField(new Rect(rect.x + titlewid + 5, rect.y + 80, rect.width - titlewid, EditorGUIUtility.singleLineHeight), element.endAction);
-
-                EditorGUI.LabelField(new Rect(rect.x, rect.y + 100, titlewid, EditorGUIUtility.singleLineHeight), "unitEffect:");
-                EditorGUI.TextField(new Rect(rect.x + titlewid + 5, rect.y + 100, rect.width - titlewid, EditorGUIUtility.singleLineHeight), "" + EditorDataContainer.GetStringById(element.unitEffect.effect));
-                EditorGUI.LabelField(new Rect(rect.x, rect.y + 120, titlewid, EditorGUIUtility.singleLineHeight), "untEftphaseTime:");
-                EditorGUI.TextField(new Rect(rect.x + titlewid + 5, rect.y + 120, rect.width - titlewid, EditorGUIUtility.singleLineHeight), "" + element.unitEffect.phaseTime);
-                EditorGUI.LabelField(new Rect(rect.x, rect.y + 140, titlewid, EditorGUIUtility.singleLineHeight), "untEftheight:");
-                EditorGUI.TextField(new Rect(rect.x + titlewid + 5, rect.y + 140, rect.width - titlewid, EditorGUIUtility.singleLineHeight), "" + element.unitEffect.height);
-                EditorGUI.LabelField(new Rect(rect.x, rect.y + 160, titlewid, EditorGUIUtility.singleLineHeight), "untEfteffPos:");
-                EditorGUI.TextField(new Rect(rect.x + titlewid + 5, rect.y + 160, rect.width - titlewid, EditorGUIUtility.singleLineHeight), "" + Enum.GetName(typeof(SkillUnit.SkillArtEffect.EffPos), element.unitEffect.effPos));
-
+                Rect drawRect = new Rect(rect.x, rect.y + 20, width - 30, 1200);
+                GUILayout.BeginArea(drawRect);
+                EditorGUILayout.TextField("Id:"+element.id, EditorDataContainer.GetSkillStringById(element.id));
+                EditorGUILayout.FloatField("guideFadeTime:" , element.guideFadeTime);
+                EditorGUILayout.TextField("guideAction:", element.guideAction);
+                EditorGUILayout.TextField("guidingAction:", element.guidingAction);
+                EditorGUILayout.TextField("endAction:", element.endAction);
+                
                 for (int i = 0; i < element.beginEffect.Count; i++)
                 {
-                    EditorGUI.LabelField(new Rect(rect.x, rect.y + 180 + i * 80, titlewid, EditorGUIUtility.singleLineHeight), "beginEffect:" + i);
-                    EditorGUI.TextField(new Rect(rect.x + titlewid + 5, rect.y + 180 + i * 80, rect.width - titlewid, EditorGUIUtility.singleLineHeight), "" + EditorDataContainer.GetStringById(element.beginEffect[i].effect));
-                    EditorGUI.LabelField(new Rect(rect.x, rect.y + 180 + i * 80 + 20, titlewid, EditorGUIUtility.singleLineHeight), "phaseTime:" + i);
-                    EditorGUI.TextField(new Rect(rect.x + titlewid + 5, rect.y + 180 + i * 80 + 20, rect.width - titlewid, EditorGUIUtility.singleLineHeight), "" + element.beginEffect[i].phaseTime);
-                    EditorGUI.LabelField(new Rect(rect.x, rect.y + 180 + i * 80 + 40, titlewid, EditorGUIUtility.singleLineHeight), "height:" + i);
-                    EditorGUI.TextField(new Rect(rect.x + titlewid + 5, rect.y + 180 + i * 80 + 40, rect.width - titlewid, EditorGUIUtility.singleLineHeight), "" + element.beginEffect[i].height);
-                    EditorGUI.LabelField(new Rect(rect.x, rect.y + 180 + i * 80 + 60, titlewid, EditorGUIUtility.singleLineHeight), "effPos:" + i);
-                    EditorGUI.TextField(new Rect(rect.x + titlewid + 5, rect.y + 180 + i * 80 + 60, rect.width - titlewid, EditorGUIUtility.singleLineHeight), "" + Enum.GetName(typeof(SkillUnit.SkillArtEffect.EffPos), element.beginEffect[i].effPos));
-
+                    if (element.beginEffect[i] != null)
+                    {
+                        EditorGUILayout.LabelField("beginEffect:" + i);
+                        EditorDrawUtility.DrawSkillArtEffect(DataConvert.ConvertSkillArtEffect(element.beginEffect[i]), null, null);
+                    }
                 }
+                if (element.unitEffect != null)
+                {
+                    EditorGUILayout.LabelField("unitEffect:");
+                    EditorDrawUtility.DrawSkillArtEffect(DataConvert.ConvertSkillArtEffect(element.unitEffect), null, null);
+                }
+                if (element.tipEffect != null)
+                {
+                    EditorGUILayout.LabelField("tipEffect:");
+                    EditorDrawUtility.DrawSkillArtEffect(DataConvert.ConvertSkillArtEffect(element.tipEffect), null, null);
+                }
+                if (element.hitEffect != null)
+                {
+                    EditorGUILayout.LabelField("hitEffect:");
+                    EditorDrawUtility.DrawSkillArtEffect(DataConvert.ConvertSkillArtEffect(element.hitEffect), null, null);
+                }
+                if (element.beginCameraAction != null)
+                {
+                    EditorGUILayout.LabelField("beginCameraAction:");
+                    EditorDrawUtility.DrawCameraAction(DataConvert.ConvertCameraAction(element.beginCameraAction));
+                }
+                if (element.moveCameraAction != null)
+                {
+                    EditorGUILayout.LabelField("moveCameraAction:");
+                    EditorDrawUtility.DrawCameraAction(DataConvert.ConvertCameraAction(element.moveCameraAction));
+                }
+                if (element.hitCameraAction !=null)
+                {
+                    EditorGUILayout.LabelField("hitCameraAction:");
+                    EditorDrawUtility.DrawCameraAction(DataConvert.ConvertCameraAction(element.hitCameraAction));
+                }
+                GUILayout.EndArea();
                 EditorGUILayout.Separator();
-                artList.elementHeight = 190 + element.beginEffect.Count * 80;
+                artList.elementHeight = 1200;// 190 + element.beginEffect.Count * 80;
             };
             // 绘制表头
             artList.drawHeaderCallback = (Rect rect) =>
@@ -492,111 +503,10 @@ namespace CySkillEditor
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
         }
-        //绘制技能信息区域
-        public void DrawSkillUnit(JSkillUnit unit)
-        {
-            EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.LabelField("Skill unit: 技能信息");
-            unit.id = GetSkillIdByString(EditorGUILayout.TextField("  id " + unit.id, "" + GetSkillStringById(unit.id)));
-            unit.artId = GetSkillIdByString(EditorGUILayout.TextField("  artId " + unit.artId, "" + GetSkillStringById(unit.artId)));
-            JSkillUnit.LaunchType lt = unit.launchType;
-            int newlt = EditorGUILayout.Popup("  LaunchType:", (int)lt, Enum.GetNames(typeof(JSkillUnit.LaunchType)));
-            if (newlt != (int)lt)
-            {
-                unit.launchType = (JSkillUnit.LaunchType)newlt;
-            }
-            JSkillUnit.TargetType tt = unit.targetType;
-            int newtt = EditorGUILayout.Popup("  TargetType:", (int)tt, Enum.GetNames(typeof(JSkillUnit.TargetType)));
-            if (newtt != (int)tt)
-            {
-                unit.targetType = (JSkillUnit.TargetType)newtt;
-            }
-            unit.skillTime = EditorGUILayout.IntField("  skillTime:", unit.skillTime);
-            unit.cd = EditorGUILayout.IntField("  cd:",  unit.cd);
-            unit.distance = EditorGUILayout.FloatField("  distance:",  unit.distance);
-            unit.referId = EditorGUILayout.IntField("  referId:", unit.referId);
-            EditorGUILayout.LabelField("弹道信息:");
-            if (unit.skillObj != null)
-            {
-                if (unit.launchType == JSkillUnit.LaunchType.SINGLELINE)
-                {
-                    if (!(unit.skillObj is SkillLine))
-                    {
-                        unit.skillObj = new SkillLine();
-                    }
-                    EditorDrawUtility.DrawSkillSingleLine((SkillLine)unit.skillObj);
-                }
-                if (unit.launchType == JSkillUnit.LaunchType.MULLINE)
-                {
-                    if (!(unit.skillObj is SkillMultiLine))
-                    {
-                        unit.skillObj = new SkillMultiLine();
-                    }
-                    EditorDrawUtility.DrawSkillMultiLine((SkillMultiLine)unit.skillObj);
-                }
-                if (unit.launchType == JSkillUnit.LaunchType.AREA)
-                {
-                    if (!(unit.skillObj is SkillArea))
-                    {
-                        unit.skillObj = new SkillArea();
-                    }
-                    EditorDrawUtility.DrawSkillArea((SkillArea)unit.skillObj);
-                }
-                if (unit.launchType == JSkillUnit.LaunchType.JUMP)
-                {
-                    if (!(unit.skillObj is SkillJump))
-                    {
-                        unit.skillObj = new SkillJump();
-                    }
-                    EditorDrawUtility.DrawSkillJump((SkillJump)unit.skillObj);
-                }
-                if (unit.launchType == JSkillUnit.LaunchType.AREA_RANDSKILL)
-                {
-                    if (!(unit.skillObj is SkillAreaRand))
-                    {
-                        unit.skillObj = new SkillAreaRand();
-                    }
-                    EditorDrawUtility.DrawSkillAreaRandom((SkillAreaRand)unit.skillObj);
-                }
-                if (unit.launchType == JSkillUnit.LaunchType.HELIX)
-                {
-                    if (!(unit.skillObj is SkillHelix))
-                    {
-                        unit.skillObj = new SkillHelix();
-                    }
-                    EditorDrawUtility.DrawSkillHelix((SkillHelix)unit.skillObj);
-                }
-                if (unit.launchType == JSkillUnit.LaunchType.FOLLOW)
-                {
-                    if (!(unit.skillObj is SkillFollow))
-                    {
-                        unit.skillObj = new SkillFollow();
-                    }
-                    EditorDrawUtility.DrawSkillFollow((SkillFollow)unit.skillObj);
-                }
-                if (unit.launchType == JSkillUnit.LaunchType.BACK_STAB)
-                {
-                    if (!(unit.skillObj is SkillBackStab))
-                    {
-                        unit.skillObj = new SkillBackStab();
-                    }
-                    EditorDrawUtility.DrawSkillBackStab((SkillBackStab)unit.skillObj);
-                }
-            }
-            else
-            {
-                if (GUILayout.Button("Add New Unit:添加弹道"))
-                {
-                    unit.skillObj = new SkillObj();
-                }
-            }
-            EditorGUILayout.EndVertical();
-        }
-
         private void DrawButtons()
         {
             //使用选择的技能参数
-            if (GUILayout.Button(new GUIContent("Use Choose Unit", "使用选择的技能Unit"),GUILayout.Height(40)))
+            if (GUILayout.Button(new GUIContent("Use Choose Unit\n加载选择的技能数据", "使用选择的技能Unit"),GUILayout.Height(40)))
             {
                 DataConvert.ConvertSkillUnit(EditorDataContainer.currentskillAssetData.skillUnit,EditorDataContainer.allSkillUnits.units[SelectSkillUnit]);
                 int curart = EditorDataContainer.currentskillAssetData.skillUnit.artId;
@@ -606,45 +516,57 @@ namespace CySkillEditor
                
             }
             //使用选择的技能参数
-            if (GUILayout.Button(new GUIContent("Use Choose Skill Art", "使用选择的技能数据填充当前技能数据"), GUILayout.Height(40)))
+            if (GUILayout.Button(new GUIContent("Use Choose Skill Art\n加载选择的特效数据", "使用选择的技能数据填充当前技能数据"), GUILayout.Height(40)))
             {
                 SkillUnit.SkillArt oart = EditorDataContainer.allSkillUnits.arts[SelectSkillArt];
                 EditorDataContainer.UseSkillArt(oart);
             }
-            if (GUILayout.Button(new GUIContent("Generate Sequence", "生成序列"), GUILayout.Height(40)))
+            if (GUILayout.Button(new GUIContent("Generate Sequence\n生成序列", "生成序列"), GUILayout.Height(40)))
             {
                 EditorDataContainer.GenerateSequence(EditorDataContainer.currentskillAssetData);
                 Close();
             }
-            if (GUILayout.Button(new GUIContent("Generate SkillData", "由当前序列生成技能数据对象"), GUILayout.Height(40)))
+            if (GUILayout.Button(new GUIContent("Generate SkillData\n生成技能数据", "由当前序列生成技能数据对象"), GUILayout.Height(40)))
             {
                 if (CurrentSequence != null)
                 {
                     EditorDataContainer.currentskillAssetData = EditorDataContainer.MakeSkillAssetData(CurrentSequence);
-                     Reset();
+                    Debug.Log(EditorDataContainer.currentskillAssetData.skillArt.beginEffect.Count);
+                    Reset();
                 }
             }
-
-            if (GUILayout.Button("Save",GUILayout.Height(40)))
+            if (GUILayout.Button("Search\n搜索技能", GUILayout.Height(40)))
+            {
+                var window = GetWindow<SearchWindow>();
+                window.Show();
+            }
+            if (GUILayout.Button("Save Asset\n保存技能为Asset",GUILayout.Height(40)))
             {
                 EditorDataContainer.SaveSkillAssetData();
             }
-            if (GUILayout.Button("Load",GUILayout.Height(40)))
+            if (GUILayout.Button("Load Asset\n加载Asset技能文件",GUILayout.Height(40)))
             {
                 EditorDataContainer.LoadSkillAssetData();
                 Reset();
                 Repaint();
-               
             }
-            if (GUILayout.Button(showUnitList ? "HideSkillUnitList" : "ShowSkillUnitList", GUILayout.Height(40)))
+            if (GUILayout.Button("Save SystemTables\n保存技能到系统表", GUILayout.Height(40)))
+            {
+                EditorDataContainer.SaveSystemTables();
+                EditorDataContainer.LoadSystemTables();
+                Reset();
+                Repaint();
+            }
+          
+            if (GUILayout.Button(showUnitList ? "HideSkillUnitList\n隐藏系统技能表" : "ShowSkillUnitList\n显示系统技能表", GUILayout.Height(40)))
             {
                 showUnitList = !showUnitList;
             }
-            if (GUILayout.Button(showArtList ? "HideSkillArtList" : "ShowSkillArtList", GUILayout.Height(40)))
+            if (GUILayout.Button(showArtList ? "HideSkillArtList\n隐藏系统特效表" : "ShowSkillArtList\n显示系统特效表", GUILayout.Height(40)))
             {
                 showArtList = !showArtList;
             }
-            if (GUILayout.Button("Close", GUILayout.Height(40)))
+            if (GUILayout.Button("Close\n关闭窗口", GUILayout.Height(40)))
             {
                 Close();
             }
@@ -760,12 +682,12 @@ namespace CySkillEditor
             if (showArtList)
             {
                 GUILayout.BeginArea(artRect);
-                DrawSkillArtList();
+                DrawSkillArtList(artRect.width);
                 GUILayout.EndArea();
             }
 
             GUILayout.BeginArea(skillunitRect);
-            DrawSkillUnit(EditorDataContainer.currentskillAssetData.skillUnit);
+            EditorDrawUtility.DrawSkillUnit(EditorDataContainer.currentskillAssetData.skillUnit);
             GUILayout.EndArea();
 
             GUILayout.BeginArea(skillartRect);

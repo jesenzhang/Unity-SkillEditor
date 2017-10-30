@@ -7,9 +7,6 @@ namespace CySkillEditor
 {
     public class JTimelineTrajectory : JTimelineBase
     {
-        private Dictionary<int, List<AnimatorClipInfo>> initialAnimationInfo = new Dictionary<int, List<AnimatorClipInfo>>();
-        private Dictionary<int, AnimatorStateInfo> initialAnimatorStateInfo = new Dictionary<int, AnimatorStateInfo>();
-
         [SerializeField]
         private List<JTrajectoryTrack> trajectoryTracks = new List<JTrajectoryTrack>();
         public List<JTrajectoryTrack> TrajectoryTracks
@@ -17,13 +14,10 @@ namespace CySkillEditor
             get { return trajectoryTracks; }
             private set { trajectoryTracks = value; }
         }
-
-        [SerializeField]
+        
         public float RunningTime = 0;
-        [SerializeField]
         private float previousTime = 0.0f;
-        [SerializeField]
-        public float SequenceUpdateRate = 0.015f;
+        private float SequenceUpdateRate = 0.15f;
         [SerializeField]
         private List<JTrajectoryClipData> allClips = new List<JTrajectoryClipData>();
         private List<JTrajectoryClipData> cachedRunningClips = new List<JTrajectoryClipData>();
@@ -40,6 +34,7 @@ namespace CySkillEditor
         public override void Process(float sequenceTime, float playbackRate)
         {
             allClips.Clear();
+
             for (int index = 0; index < TrajectoryTracks.Count; index++)
             {
                 var track = TrajectoryTracks[index];
@@ -212,12 +207,18 @@ namespace CySkillEditor
             for (int i=0;i< line.waves;i++)
             {
                 JSingleLineTrajectory sg = new JSingleLineTrajectory();
-                sg.parent = clip;
+                sg.TargetObject = clip.TargetObject;
+                sg.skillunit = clip.skillunit;
+                sg.effectunit = clip.effectunit;
                 sg._originDir = clip.TargetObject.transform.forward;
                 sg._delayBegin = i * line.waveDelay;
                 list.Add(sg);
             }
-            clip.PlaybackDuration = (line.waveDelay * line.waves + line.moveTime+ clip.skillunit.guidePolicy.guideTime+ clip.skillunit.guidePolicy.guidingTime) /1000f;
+            if(clip.skillunit.guidePolicy!=null)
+                clip.PlaybackDuration = (line.waveDelay * line.waves + line.moveTime+ clip.skillunit.guidePolicy.guideTime+ clip.skillunit.guidePolicy.guidingTime) /1000f;
+            else
+                clip.PlaybackDuration = (line.waveDelay * line.waves + line.moveTime) / 1000f;
+
             return list.ToArray();
         }
         public  Vector3 RotateRound(Vector3 dir, Vector3 axis, float angle)
@@ -243,8 +244,10 @@ namespace CySkillEditor
                     for (int j = 0; j < line.waves; j++)
                     {
                         JSingleLineTrajectory sg = new JSingleLineTrajectory();
-                        sg._originDir = dir;
-                        sg.parent = clip;
+                        sg.TargetObject = clip.TargetObject;
+                        sg._originDir = ndir;
+                        sg.skillunit = clip.skillunit;
+                        sg.effectunit = clip.effectunit;
                         sg._delayBegin = j * line.waveDelay;
                         list.Add(sg);
                     }
@@ -252,7 +255,6 @@ namespace CySkillEditor
             }
             if (line.shape.area == SkillShape.Area.QUADRATE)
             {
-                float angle = 360f / line.unitCount;
                 Vector3 dir = clip.TargetObject.transform.forward;
                 Vector3 ndir = RotateRound(dir, new Vector3(0, 1, 0),90);
                 if (line.unitCount > 1)
@@ -267,9 +269,11 @@ namespace CySkillEditor
                     for (int j = 0; j < line.waves; j++)
                     {
                         JSingleLineTrajectory sg = new JSingleLineTrajectory();
+                        sg.TargetObject = clip.TargetObject;
                         sg._originDir = dir;
                         sg._originPosOffset = beginPos + ndir * i;
-                        sg.parent = clip;
+                        sg.skillunit = clip.skillunit;
+                        sg.effectunit = clip.effectunit;
                         sg._delayBegin =  j*line.waveDelay;
                         list.Add(sg);
                     }
@@ -288,8 +292,11 @@ namespace CySkillEditor
                     for (int j = 0; j < line.waves; j++)
                     {
                         JSingleLineTrajectory sg = new JSingleLineTrajectory();
+                        sg.TargetObject = clip.TargetObject;
                         sg._originDir = ndir;
-                        sg.parent = clip;
+                        sg._originPosOffset = ndir* line.shape.param1;
+                        sg.skillunit = clip.skillunit;
+                        sg.effectunit = clip.effectunit;
                         sg._delayBegin = j * line.waveDelay;
                         list.Add(sg);
                     }
@@ -312,19 +319,19 @@ namespace CySkillEditor
                 Vector3 pdir = Vector3.zero;
                 for (int i = 0; i < line.unitCount; i++)
                 {
-                    launchPos = beginPos + i * ndir;
                     if (line.shape.param3 == 1)
                     {
+                        launchPos = beginPos + i * ndir;
                         Vector3 tempPos = dir * line.shape.param1;
-                        pdir = tempPos - launchPos;
+                        pdir = (tempPos - launchPos).normalized;
                     }
                     else
                     if (line.shape.param3 == 2)
                     {
-                        pdir =  launchPos;
+                        Vector3 tempPos = beginPos + i * ndir;
+                        pdir = (tempPos - launchPos).normalized;
                     }
                    
-                    pdir = Vector3.Normalize(pdir);
                     if (line.waves == 0)
                         line.waves = 1;
                     for (int j = 0; j < line.waves; j++)
@@ -332,13 +339,19 @@ namespace CySkillEditor
                         JSingleLineTrajectory sg = new JSingleLineTrajectory();
                         sg._originPosOffset = launchPos;
                         sg._originDir = pdir;
-                        sg.parent = clip;
+                        sg.TargetObject = clip.TargetObject;
+                        sg.skillunit = clip.skillunit;
+                        sg.effectunit = clip.effectunit;
                         sg._delayBegin = j * line.waveDelay;
                         list.Add(sg);
                     }
                 }
             }
-            clip.PlaybackDuration = 10;// (line.waveDelay * line.waves + line.moveTime + clip.skillunit.guidePolicy.guideTime + clip.skillunit.guidePolicy.guidingTime) / 1000f;
+            if (clip.skillunit.guidePolicy != null)
+                clip.PlaybackDuration = (line.waveDelay * line.waves + line.moveTime + clip.skillunit.guidePolicy.guideTime + clip.skillunit.guidePolicy.guidingTime) / 1000f;
+            else
+                clip.PlaybackDuration = (line.waveDelay * line.waves + line.moveTime) / 1000f;
+
             return list.ToArray();
         }
 

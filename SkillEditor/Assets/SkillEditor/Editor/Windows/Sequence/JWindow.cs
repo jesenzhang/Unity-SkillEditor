@@ -352,7 +352,13 @@ namespace CySkillEditor
                         GUILayout.Box("", USEditorUtility.SeperatorStyle, GUILayout.Height(18.0f));
                         GUILayout.Space(space);
                     }
+                    if (GUILayout.Button("CreateNewSkill", EditorStyles.toolbarButton))
+                    {
+                        Debug.Log("创建新技能");
+                        var window = GetWindow<SetModelWindow>();
+                        window.Show();
 
+                    }
                     if (GUILayout.Button("Configure", EditorStyles.toolbarButton))
                     {
                         Debug.Log("配置面板");
@@ -369,6 +375,7 @@ namespace CySkillEditor
                     {
                         EditorDataContainer.LoadSkillAssetData();
                     }
+                  
                     GUILayout.FlexibleSpace();
                 }
                 GUILayout.EndHorizontal();

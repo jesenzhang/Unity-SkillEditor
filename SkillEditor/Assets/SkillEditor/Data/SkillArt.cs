@@ -22,6 +22,8 @@ namespace CySkillEditor
         [SerializeField]
         //人物模型动作
         public string animationController = "";
+        //人物模型动作
+        public RuntimeAnimatorController animationControllerObj;
 
         //	静态ID, 从1开始
         public int id;
@@ -42,12 +44,12 @@ namespace CySkillEditor
         public List<SkillEffectUnit> hitEffect;
         //	预警特效	
         public List<SkillEffectUnit> tipEffect;
-         //	开始阶段镜头动作类型
-        public SkillCameraAction beginCameraAction;
+        //	开始阶段镜头动作类型
+        public List<SkillCameraAction> beginCameraAction;
         //	移动阶段镜头动作类型
-        public SkillCameraAction moveCameraAction;
+        public List<SkillCameraAction> moveCameraAction;
         //	命中阶段镜头动作类型
-        public SkillCameraAction hitCameraAction; 
+        public List<SkillCameraAction> hitCameraAction; 
         // 	预警参考点
         // 技能开始动作与上一个动作的动画混合时间
         public float guideFadeTime = 0.3f;
@@ -59,9 +61,9 @@ namespace CySkillEditor
             endEffect = new List<SkillEffectUnit>();
             hitEffect = new List<SkillEffectUnit>();
             tipEffect = new List<SkillEffectUnit>();
-            beginCameraAction = new SkillCameraAction();
-            moveCameraAction = new SkillCameraAction();
-            hitCameraAction = new SkillCameraAction();
+            beginCameraAction = new List<SkillCameraAction>();
+            moveCameraAction = new List<SkillCameraAction>();
+            hitCameraAction = new List<SkillCameraAction>();
         }
         public SkillArt Copy()
         {
@@ -73,40 +75,33 @@ namespace CySkillEditor
             b.modelType = modelType;
             b.idString = idString;
             b.guideAction = guideAction;
-            b.guidingAction = guidingAction; 
+            b.guidingAction = guidingAction;
+            b.animationControllerObj = animationControllerObj;
 
             if (beginCameraAction != null)
-                b.beginCameraAction = beginCameraAction.Copy();
-            else
-                b.beginCameraAction = null;
-
+            {
+                b.beginCameraAction = new List<SkillCameraAction>();
+                for (int i = 0; i < beginCameraAction.Count; i++)
+                {
+                    b.beginCameraAction.Add(beginCameraAction[i].Copy());
+                }
+            }
             if (moveCameraAction != null)
-                b.moveCameraAction = moveCameraAction.Copy();
-            else
-                b.moveCameraAction = null;
-
+            {
+                b.moveCameraAction = new List<SkillCameraAction>();
+                for (int i = 0; i < moveCameraAction.Count; i++)
+                {
+                    b.moveCameraAction.Add(moveCameraAction[i].Copy());
+                }
+            }
             if (hitCameraAction != null)
-                b.hitCameraAction = hitCameraAction.Copy();
-            else
-                b.hitCameraAction = null;
-            /*
-            if (unitEffect != null)
-                b.unitEffect = unitEffect.Copy();
-            else
-                b.unitEffect = null;
-            if (endEffect != null)
-                b.endEffect = endEffect.Copy();
-            else
-                b.endEffect = null;
-            if (hitEffect != null)
-                b.hitEffect = hitEffect.Copy();
-            else
-                b.hitEffect = null;
-            if (tipEffect != null)
-                b.tipEffect = tipEffect.Copy();
-            else
-                b.tipEffect = null;
-            */
+            {
+                b.hitCameraAction = new List<SkillCameraAction>();
+                for (int i = 0; i < hitCameraAction.Count; i++)
+                {
+                    b.hitCameraAction.Add(hitCameraAction[i].Copy());
+                }
+            }
             if (beginEffect != null)
             {
                 b.beginEffect = new List<SkillEffectUnit>();

@@ -22,7 +22,8 @@ namespace CySkillEditor
             float handleSize = GetHandleSize(tangent);
             Color color = Handles.color;
             Handles.color = ControlColor;
-            tangent = Handles.FreeMoveHandle(tangent, Quaternion.identity, handleSize * 0.15f, snapMove, new Handles.DrawCapFunction(Handles.RectangleCap));
+            tangent = Handles.FreeMoveHandle(tangent, Quaternion.identity, handleSize * 0.15f, snapMove, new Handles.CapFunction(Handles.RectangleHandleCap));
+            
             Handles.color = color;
 
             return tangent;
@@ -38,7 +39,7 @@ namespace CySkillEditor
             float handleSize = GetHandleSize(tangent);
             Color color = Handles.color;
             Handles.color = TangentColor;
-            tangent = Handles.FreeMoveHandle(tangent, Quaternion.identity, handleSize * 0.15f, snapMove, new Handles.DrawCapFunction(Handles.RectangleCap));
+            tangent = Handles.FreeMoveHandle(tangent, Quaternion.identity, handleSize * 0.15f, snapMove, new Handles.CapFunction(Handles.RectangleHandleCap));
             Handles.color = color;
 
             return tangent;
@@ -54,13 +55,13 @@ namespace CySkillEditor
             float handleSize = GetHandleSize(position);
             Color color = Handles.color;
             Handles.color = xAxisColor;
-            position = Handles.Slider(position, rotation * Vector3.right, handleSize, new Handles.DrawCapFunction(Handles.ArrowCap), snapX);
+            position = Handles.Slider(position, rotation * Vector3.right, handleSize, new Handles.CapFunction(Handles.ArrowHandleCap), snapX);
             Handles.color = yAxisColor;
-            position = Handles.Slider(position, rotation * Vector3.up, handleSize, new Handles.DrawCapFunction(Handles.ArrowCap), snapY);
+            position = Handles.Slider(position, rotation * Vector3.up, handleSize, new Handles.CapFunction(Handles.ArrowHandleCap), snapY);
             Handles.color = zAxisColor;
-            position = Handles.Slider(position, rotation * Vector3.forward, handleSize, new Handles.DrawCapFunction(Handles.ArrowCap), snapZ);
+            position = Handles.Slider(position, rotation * Vector3.forward, handleSize, new Handles.CapFunction(Handles.ArrowHandleCap), snapZ);
             Handles.color = centerColor;
-            position = Handles.FreeMoveHandle(position, rotation, handleSize * 0.15f, snapMove, new Handles.DrawCapFunction(Handles.RectangleCap));
+            position = Handles.FreeMoveHandle(position, rotation, handleSize * 0.15f, snapMove, new Handles.CapFunction(Handles.ArrowHandleCap));
             Handles.color = color;
 
             return position;

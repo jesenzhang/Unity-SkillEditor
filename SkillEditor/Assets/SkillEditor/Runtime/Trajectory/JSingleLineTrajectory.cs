@@ -15,13 +15,13 @@ namespace CySkillEditor
         }
         public override bool CheckMoveOver(float tempTime)
         {
-            if (parent.skillunit.launchType == JSkillUnit.LaunchType.SINGLELINE)
+            if ( skillunit.launchType == JSkillUnit.LaunchType.SINGLELINE)
             {
-                return tempTime > ((SkillLine)parent.skillunit.skillObj).moveTime / 1000f;
+                return tempTime > ((SkillLine) skillunit.skillObj).moveTime / 1000f;
             }
-            if (parent.skillunit.launchType == JSkillUnit.LaunchType.MULLINE)
+            if ( skillunit.launchType == JSkillUnit.LaunchType.MULLINE)
             {
-                return tempTime > ((SkillMultiLine)parent.skillunit.skillObj).moveTime / 1000f;
+                return tempTime > ((SkillMultiLine) skillunit.skillObj).moveTime / 1000f;
             }
             return false;
         }
@@ -34,7 +34,7 @@ namespace CySkillEditor
                     GameObject.DestroyImmediate(e);
             }
             effecrObj.Clear();
-            effecrObj.Add(GameObject.Instantiate(parent.effectunit.artEffect.effectObj));
+            effecrObj.Add(GameObject.Instantiate( effectunit.artEffect.effectObj));
             particleSys.Clear();
             ParticleSystem[] particleSys0 = effecrObj[0].GetComponentsInChildren<ParticleSystem>();
             for (int i = 0; i < particleSys0.Length; i++)
@@ -50,42 +50,42 @@ namespace CySkillEditor
             effecrObj[0].SetActive(false);
             SetState(TRAJSTATE.STATE_BEGIN);
             float offsetY = 0;
-            effecrObj[0].transform.SetParent(parent.TargetObject.transform);
-            if (parent.effectunit.configure.posType == CySkillEditor.EffectConfigure.PosType.FEET)
+            effecrObj[0].transform.SetParent(TargetObject.transform);
+            if ( effectunit.configure.posType == CySkillEditor.EffectConfigure.PosType.FEET)
             {
                 offsetY = 0;
             }
-            else if (parent.effectunit.configure.posType == CySkillEditor.EffectConfigure.PosType.BODY)
+            else if ( effectunit.configure.posType == CySkillEditor.EffectConfigure.PosType.BODY)
             {
-                offsetY = parent.effectunit.configure.bodyHeight;
+                offsetY =  effectunit.configure.bodyHeight;
             }
-            else if (parent.effectunit.configure.posType == CySkillEditor.EffectConfigure.PosType.HEAD)
+            else if ( effectunit.configure.posType == CySkillEditor.EffectConfigure.PosType.HEAD)
             {
-                offsetY = parent.effectunit.configure.headHeight;
+                offsetY =  effectunit.configure.headHeight;
             }
-            else if (parent.effectunit.configure.posType == CySkillEditor.EffectConfigure.PosType.BONE)
+            else if ( effectunit.configure.posType == CySkillEditor.EffectConfigure.PosType.BONE)
             {
-                Transform bone = parent.TargetObject.transform.Find(parent.effectunit.configure.boneName);
+                Transform bone =  TargetObject.transform.Find( effectunit.configure.boneName);
                 if (bone)
                     effecrObj[0].transform.SetParent(bone);
             }
 
             effecrObj[0].transform.localPosition = new Vector3(0, offsetY, 0);
-            Vector3 offset = new Vector3(parent.effectunit.configure.position.x, parent.effectunit.configure.position.y, parent.effectunit.configure.position.z);
+            Vector3 offset =  effectunit.configure.position;
             effecrObj[0].transform.localPosition += offset;
             _originPos = effecrObj[0].transform.position;
             _originPos += _originPosOffset;
-            if (parent.effectunit.configure.posType == CySkillEditor.EffectConfigure.PosType.WORLD)
+            if ( effectunit.configure.posType == CySkillEditor.EffectConfigure.PosType.WORLD)
             {
                 effecrObj[0].transform.position = offset;
             }
-            if (parent.Target != null)
+            if ( Target != null)
             {
-                _originDir = (parent.Target.position - parent.OriginalPos).normalized;
+                _originDir = ( Target.position -  _originPos).normalized;
             }
             else
             {
-                //_originDir = parent.TargetObject.transform.forward;
+                //_originDir =  TargetObject.transform.forward;
             }
             _originDir += _originDirOffset;
         }
@@ -110,16 +110,16 @@ namespace CySkillEditor
                 }
                 Vector3 dir = _originDir;
 
-                if (parent.skillunit.launchType == JSkillUnit.LaunchType.SINGLELINE)
+                if ( skillunit.launchType == JSkillUnit.LaunchType.SINGLELINE)
                 {
-                    SkillLine line = (SkillLine)parent.skillunit.skillObj;
+                    SkillLine line = (SkillLine) skillunit.skillObj;
                     float fen = time / (line.moveTime / 1000f);
                     Vector3 final = _originPos + dir * line.speed * line.moveTime / 1000f;
                     effecrObj[0].transform.position = Vector3.Lerp(_originPos, final, fen);
                 }
-                if (parent.skillunit.launchType == JSkillUnit.LaunchType.MULLINE)
+                if ( skillunit.launchType == JSkillUnit.LaunchType.MULLINE)
                 {
-                    SkillMultiLine line = (SkillMultiLine)parent.skillunit.skillObj;
+                    SkillMultiLine line = (SkillMultiLine) skillunit.skillObj;
                     float fen = time / (line.moveTime / 1000f);
                     Vector3 final = _originPos + dir * line.speed * line.moveTime / 1000f;
                     effecrObj[0].transform.position = Vector3.Lerp(_originPos, final, fen);

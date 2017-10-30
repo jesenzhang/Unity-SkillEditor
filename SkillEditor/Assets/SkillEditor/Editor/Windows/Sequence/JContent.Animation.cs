@@ -127,10 +127,12 @@ namespace CySkillEditor
                 rightHandletemp.x -= DisplayArea.x;
                 rightHandletemp.y = 0;
 
-                GUI.color = new Color(70 / 255.0f, 147 / 255.0f, 236 / 255.0f, 1);
+                //GUI.color = new Color(70 / 255.0f, 147 / 255.0f, 236 / 255.0f, 1);
+                GUI.color = ColorTools.GetGrandientColor((float)renderdata.index / (float)CountClip);
+
                 if (SelectedObjects.Contains(renderdata))
                 {
-                    GUI.color = Color.yellow;
+                    GUI.color = ColorTools.SelectColor;// Color.yellow;
                 }
 
                 GUI.Box(renderRecttemp, "", USEditorUtility.NormalWhiteOutLineBG);
@@ -257,7 +259,10 @@ namespace CySkillEditor
                     Rect nameRect = addRect;
                     nameRect.x += 40+ lineHeight + 40;
                     nameRect.width -= (lineHeight + 120);
-                    animationline.AnimationTracks[j].name=GUI.TextField(nameRect, animationline.AnimationTracks[j].name);
+                    //animationline.AnimationTracks[j].name=GUI.TextField(nameRect, animationline.AnimationTracks[j].name);
+                    int select = SkillNames.ActionNames.Contains(animationline.AnimationTracks[j].name)? SkillNames.ActionNames.IndexOf(animationline.AnimationTracks[j].name) : 0;
+                    select = EditorGUI.Popup(nameRect, select, SkillNames.ActionNames.ToArray());
+                    animationline.AnimationTracks[j].name = SkillNames.ActionNames[select];
 
                     Rect enableRect = addRect;
                     enableRect.x = addRect.x + addRect.width - 2 * lineHeight - 2.0f; ;

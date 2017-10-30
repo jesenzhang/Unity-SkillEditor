@@ -11,16 +11,18 @@ namespace CySkillEditor
     [CustomEditor(typeof(JTrajectoryClipData))]
     public class JTrajectoryClipDataInspector : Editor
     {
-        List<string> showproperty = new List<string>();
         public override void OnInspectorGUI()
         {
             JTrajectoryClipData clip = (JTrajectoryClipData)target;
             var serializedProperty = serializedObject.FindProperty("Target");
             EditorGUILayout.PropertyField(serializedProperty);
 
-            clip.StartTime = EditorGUILayout.FloatField("StartTime:", clip.StartTime);
-            clip.PlaybackDuration = EditorGUILayout.FloatField("PlaybackDuration:",clip.PlaybackDuration);
-            clip.Looping = EditorGUILayout.Toggle("Looping:", clip.Looping);
+            var serializedStartTime = serializedObject.FindProperty("startTime");
+            EditorGUILayout.PropertyField(serializedStartTime);
+            var serializedplaybackDuration = serializedObject.FindProperty("playbackDuration");
+            EditorGUILayout.PropertyField(serializedplaybackDuration);
+            var serializedlooping = serializedObject.FindProperty("looping");
+            EditorGUILayout.PropertyField(serializedlooping);
             
             EditorDrawUtility.DrawSkillEffectUnit(clip.effectunit);
             EditorDrawUtility.DrawSkillUnit(clip.skillunit);

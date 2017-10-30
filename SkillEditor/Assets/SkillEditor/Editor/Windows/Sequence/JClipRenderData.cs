@@ -24,6 +24,8 @@ namespace CySkillEditor
         public Vector2 renderPosition;
         [SerializeField]
         public ScriptableObject ClipData;
+        [SerializeField]
+        public int index;
 
     }
 }

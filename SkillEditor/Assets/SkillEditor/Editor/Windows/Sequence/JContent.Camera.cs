@@ -126,7 +126,7 @@ namespace CySkillEditor
                 GUI.color = new Color(70 / 255.0f, 147 / 255.0f, 236 / 255.0f, 1);
                 if (SelectedObjects.Contains(renderdata))
                 {
-                    GUI.color = Color.yellow;
+                    GUI.color = ColorTools.SelectColor;
                 }
 
                 GUI.Box(renderRecttemp, "", USEditorUtility.NormalWhiteOutLineBG);

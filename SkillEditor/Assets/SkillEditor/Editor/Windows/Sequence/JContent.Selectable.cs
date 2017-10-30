@@ -68,6 +68,7 @@ namespace CySkillEditor
             OnSingleEventSelected(selectobj);
             OnSingleTrajectorySelected(selectobj);
             OnSingleCameraSelected(selectobj);
+            OnSingleEffectSelected(selectobj);
         }
         #endregion
 
@@ -84,6 +85,7 @@ namespace CySkillEditor
                 StartDraggingEventClip(clipData);
                 StartDraggingTrajectoryClip(clipData);
                 StartDraggingCameraClip(clipData);
+                StartDraggingEffectClip(clipData);
             }
         }
         #endregion
@@ -100,6 +102,7 @@ namespace CySkillEditor
                 ProcessDraggingEventClip(clip, mouseDelta);
                 ProcessDraggingTrajectoryClip(clip, mouseDelta);
                 ProcessDraggingCameraClip(clip, mouseDelta);
+                ProcessDraggingEffectClip(clip, mouseDelta);
             }
         }
         #endregion

@@ -20,22 +20,17 @@ namespace CySkillEditor
         private List<JSoundClipData> allClips = new List<JSoundClipData>();
 
         private List<JSoundClipData> cachedRunningClips = new List<JSoundClipData>();
-
-        [SerializeField]
+        
         private Vector3 sourcePosition;
-
-        [SerializeField]
+        
         private Quaternion sourceOrientation;
-
-        [SerializeField]
+        
         public float RunningTime = 0;
-        [SerializeField]
         private float previousTime = 0.0f;
-        [SerializeField]
-        public float SequenceUpdateRate = 0.015f;
+        private float SequenceUpdateRate = 0.15f;
 
-        private bool scrubbing = false;
-
+        private Dictionary<JSoundClipData, JEffectSound> allEffectSoundDict = new Dictionary<JSoundClipData, JEffectSound>();
+      
         [SerializeField]
         private AudioClip orientationClip;
         public AudioClip OrientationClip
@@ -46,7 +41,7 @@ namespace CySkillEditor
                 {
                     sound = AffectedObject.GetComponent<AudioSource>();
                 }
-                if (orientationClip == null)
+                if (sound!=null )
                 {
                     orientationClip = sound.clip;
                 }
@@ -63,7 +58,8 @@ namespace CySkillEditor
                 if (sound == null)
                 {
                     sound = AffectedObject.GetComponent<AudioSource>();
-                    orientationClip = sound.clip;
+                    if(sound!=null)
+                        orientationClip = sound.clip;
                 }
 
                 return sound;
@@ -78,13 +74,23 @@ namespace CySkillEditor
 
         public override void StartTimeline()
         {
+            /*
+            if (sound == null)
+                return;
             sourcePosition = AffectedObject.transform.localPosition;
             sourceOrientation = AffectedObject.transform.localRotation;
             Sound.playOnAwake = false;
             Sound.mute = false;
+            */
         }
         public void ResetSound()
         {
+            foreach (var clips in allEffectSoundDict.Values)
+            {
+                clips.Reset();
+            }
+            /*if (sound == null)
+                return;
             if (sound)
             {
                 Sound.Stop();
@@ -94,11 +100,13 @@ namespace CySkillEditor
             {
                 AffectedObject.transform.localPosition = sourcePosition;
                 AffectedObject.transform.localRotation = sourceOrientation;
-            }
+            }*/
         }
 
         public override void Process(float sequenceTime, float playbackRate)
         {
+          //  if (sound == null)
+          //      return;
             allClips.Clear();
             for (int index = 0; index < SoundTracks.Count; index++)
             {
@@ -118,7 +126,7 @@ namespace CySkillEditor
             var timelinePlayingInReverse = totalDeltaTime < 0.0f;
             var runningTime = SequenceUpdateRate;
             var runningTotalTime = previousTime + runningTime;
-            scrubbing = !(absDeltaTime == runningTime);
+
             if (timelinePlayingInReverse)
             {
                 ResetSound();
@@ -134,7 +142,14 @@ namespace CySkillEditor
                     {
                         var clip = allClips[allClipIndex];
                         if (!JSoundClipData.IsClipRunning(runningTotalTime, clip) && !clip.Looping)
+                        {
+                            if (allEffectSoundDict.ContainsKey(clip))
+                            {
+                                allEffectSoundDict[clip].Reset();
+                                allEffectSoundDict.Remove(clip);
+                            }
                             continue;
+                        }
                         cachedRunningClips.Add(clip);
                     }
 
@@ -143,10 +158,24 @@ namespace CySkillEditor
                     for (int runningClipIndex = 0; runningClipIndex < cachedRunningClips.Count; runningClipIndex++)
                     {
                         var clip = cachedRunningClips[runningClipIndex];
-                        PlayClip(clip, runningTotalTime);
+                        if (!allEffectSoundDict.ContainsKey(clip))
+                        {
+                            allEffectSoundDict.Add(clip, new JEffectSound());
+                            List<object> param = new List<object>();
+                            param.Add(AffectedObject.gameObject);
+                            param.Add(clip.Clip);
+                            param.Add(clip.PlaybackDuration);
+                            allEffectSoundDict[clip].SetData(param.ToArray());
+                            allEffectSoundDict[clip].Init();
+                            allEffectSoundDict[clip].OnUpdate(runningTime);
+                        }else
+                        {
+                            allEffectSoundDict[clip].OnUpdate(runningTime);
+                        }
+                        
+                        //PlayClip(clip, runningTotalTime);
                     }
-
-                    //  Sound.PlayScheduled(runningTime);
+                    
 
                     absDeltaTime -= SequenceUpdateRate;
                     if (!Mathf.Approximately(absDeltaTime, Mathf.Epsilon) && absDeltaTime < SequenceUpdateRate)
@@ -161,6 +190,8 @@ namespace CySkillEditor
 
         private void PlayClip(JSoundClipData clipToPlay, float sequenceTime)
         {
+            if (sound == null)
+                return;
             if (Sound != null)
             {
                 if (Sound.clip != clipToPlay.Clip)
@@ -198,10 +229,17 @@ namespace CySkillEditor
 
         public override void StopTimeline()
         {
+            foreach (var clips in allEffectSoundDict.Values)
+            {
+                clips.Reset();
+            }
+            /*
+            if (sound == null)
+                return;
             if (Sound)
             {
                 ResetSound();
-            }
+            }*/
             previousTime = 0.0f;
 
         }
@@ -209,26 +247,41 @@ namespace CySkillEditor
         public override void EndTimeline()
         {
             base.EndTimeline();
-            Sound.Stop();
+            foreach (var clips in allEffectSoundDict.Values)
+            {
+                clips.Reset();
+            }
+           // if (sound == null)
+           //     return;
+           // Sound.Stop();
         }
 
         public override void PauseTimeline()
         {
-            if (Sound != null)
-            {
-                Sound.Pause();
-            }
+            //if (sound == null)
+            //    return;
+            //if (Sound != null)
+           // {
+           //     Sound.Pause();
+           // }
         }
         public override void ResumeTimeline()
         {
-            Sound.Play();
+            //if (sound == null)
+            //    return;
+           // Sound.Play();
         }
         public void AddTrack(JSoundTrack soundTrack)
         {
             soundTrack.TimeLine = this;
             SoundTracks.Add(soundTrack);
         }
-
+        public JSoundTrack AddNewTrack()
+        {
+            var track = ScriptableObject.CreateInstance<JSoundTrack>();
+            AddTrack(track);
+            return track;
+        }
         public void RemoveTrack(JSoundTrack soundTrack)
         {
             SoundTracks.Remove(soundTrack);

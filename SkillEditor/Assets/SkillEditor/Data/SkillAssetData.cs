@@ -27,7 +27,7 @@ namespace CySkillEditor
         }
         public SkillAssetData Copy()
         {
-            SkillAssetData copyskill = new SkillAssetData();
+            SkillAssetData copyskill = ScriptableObject.CreateInstance<SkillAssetData>();
             copyskill.skillArt = skillArt.Copy();
             copyskill.skillUnit = skillUnit.Copy();
             return copyskill;

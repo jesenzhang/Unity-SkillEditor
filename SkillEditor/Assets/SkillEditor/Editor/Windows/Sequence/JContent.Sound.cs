@@ -12,16 +12,18 @@ namespace CySkillEditor
         public Type Type;
         public Type PairedType;
         public JTimelineBase Line;
+        public JSoundTrack Track;
         public string Category;
         public string Label;
         public float Firetime;
 
-        public ContextData(int controlId, Type type, Type pairedType, JTimelineBase line, string category, string label, float firetime)
+        public ContextData(int controlId, Type type, Type pairedType, JTimelineBase line, JSoundTrack track,string category, string label, float firetime)
         {
             ControlID = controlId;
             Type = type;
             PairedType = pairedType;
             Line = line;
+            Track = track;
             Category = category;
             Label = label;
             Firetime = firetime;
@@ -77,7 +79,8 @@ namespace CySkillEditor
             clipData.StartTime = time;
             if (clip == null)
             {
-                clipData.Clip = line.OrientationClip;
+                if(line.OrientationClip!=null)
+                    clipData.Clip = line.OrientationClip;
             }
             else
             {
@@ -88,10 +91,13 @@ namespace CySkillEditor
             {
                 SequenceWindow.ShowNotification(new GUIContent("AudioClip is NULL"));
             }
-            clipData.SoundDuration = clipData.Clip.length;
-            clipData.PlaybackDuration = clipData.SoundDuration;
-            clipData.Track = track;
-            track.AddClip(clipData);
+            if (clipData.Clip != null)
+            {
+                clipData.SoundDuration = clipData.Clip.length;
+                clipData.PlaybackDuration = clipData.SoundDuration;
+                clipData.Track = track;
+                track.AddClip(clipData);
+            }
             if (timelineClipRenderDataMap.ContainsKey(track))
             {
                 var cachedData = ScriptableObject.CreateInstance<JClipRenderData>();
@@ -109,7 +115,7 @@ namespace CySkillEditor
         }
         private void PickNewAudioClip(JTimelineSound line, JSoundTrack track, float time, string stateName)
         {
-            ContextData data = new ContextData(controlID, typeof(JTimelineSound), typeof(AudioClip), line, "", "", time);
+            ContextData data = new ContextData(controlID, typeof(JTimelineSound), typeof(AudioClip), line, track, "", "", time);
             showObjectPicker(data);
         }
 
@@ -187,10 +193,12 @@ namespace CySkillEditor
                 rightHandletemp.x -= DisplayArea.x;
                 rightHandletemp.y = 0;
 
-                GUI.color = new Color(243 / 255.0f, 154 / 255.0f, 0 / 255.0f, 1f);
+                //GUI.color = new Color(243 / 255.0f, 154 / 255.0f, 0 / 255.0f, 1f);
+                GUI.color = ColorTools.GetGrandientColor((float)renderdata.index / (float)CountClip);
+
                 if (SelectedObjects.Contains(renderdata))
                 {
-                    GUI.color = Color.yellow;
+                    GUI.color = ColorTools.SelectColor;
                 }
                 Texture2D texture = AssetPreview.GetAssetPreview(SoundClipData.Clip);
                 if (texture != null)
@@ -269,7 +277,7 @@ namespace CySkillEditor
                     if (pickedObject != null)
                     {
                         AudioClip clip = (AudioClip)pickedObject;
-                        AddNewSoundState((JTimelineSound)savedData.Line, linetrack, savedData.Firetime, clip.name, clip);
+                        AddNewSoundState((JTimelineSound)savedData.Line, (JSoundTrack)savedData.Track, savedData.Firetime, clip.name, clip);
                     }
                     UnityEngine.Event.current.Use();
                 }
@@ -331,7 +339,10 @@ namespace CySkillEditor
                     Rect nameRect = addRect;
                     nameRect.x += 40 + lineHeight + 40;
                     nameRect.width -= (lineHeight + 120);
-                    soundline.SoundTracks[j].name=GUI.TextField(nameRect, soundline.SoundTracks[j].name);
+                    //soundline.SoundTracks[j].name=GUI.TextField(nameRect, soundline.SoundTracks[j].name);
+                    int select = SkillNames.SoundNames.Contains(soundline.SoundTracks[j].name) ? SkillNames.SoundNames.IndexOf(soundline.SoundTracks[j].name) : 0;
+                    select = EditorGUI.Popup(nameRect, select, SkillNames.SoundNames.ToArray());
+                    soundline.SoundTracks[j].name = SkillNames.SoundNames[select];
 
 
                     Rect enableRect = addRect;

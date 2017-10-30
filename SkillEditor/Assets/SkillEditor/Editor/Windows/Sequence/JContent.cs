@@ -40,23 +40,25 @@ namespace CySkillEditor
 
         List<List<JTimelineBase>> TypeList;
 
+        //注册显示的数组
+        List<TimeLineType> showTypeList = Configure.showTypeList;
+
         //目录fold字典
         private Dictionary<int, bool> foldStateDict;
         public Dictionary<int, bool> FoldStateDict
         {
             get
             {
-                if (foldStateDict == null || foldStateDict.Keys.Count != CurrentSequence.TimelineContainerCount + CurrentSequence.TimelineContainerCount * Enum.GetNames(typeof(TimeLineType)).Length)
+                if (foldStateDict == null || foldStateDict.Keys.Count != CurrentSequence.TimelineContainerCount + CurrentSequence.TimelineContainerCount * showTypeList.Count)
                 {
 
                     foldStateDict = new Dictionary<int, bool>();
                     for (int i = 0; i < CurrentSequence.TimelineContainerCount; i++)
                     {
                         foldStateDict.Add(i + 1, true);
-                        Array types = Enum.GetValues(typeof(TimeLineType));
-                        for (int j = 0; j < types.Length; j++)
+                        for (int j = 0; j < showTypeList.Count; j++)
                         {
-                            TimeLineType type = (TimeLineType)types.GetValue(j);
+                            TimeLineType type = showTypeList[j];
                             int index = (int)type;
                             foldStateDict.Add((i + 1) * 100 + index, true);
                         }
@@ -305,6 +307,7 @@ namespace CySkillEditor
             if (currentSequence)
                 InitializeRenderMapWithSequence();
         }
+        int CountClip = 0;
         public void InitializeRenderMapWithSequence()
         {
             if (currentSequence)
@@ -323,6 +326,7 @@ namespace CySkillEditor
                     AddRenderDataForEvent(timelines[i]);
                     AddRenderDataForTrajectory(timelines[i]);
                     AddRenderDataForCamera(timelines[i]);
+                    AddRenderDataForEffect(timelines[i]);
                     #endregion
                 }
             }
@@ -343,6 +347,7 @@ namespace CySkillEditor
                 AddRenderDataForEvent(line);
                 AddRenderDataForTrajectory(line);
                 AddRenderDataForCamera(line);
+                AddRenderDataForEffect(line);
                 #endregion
             }
         }
@@ -359,6 +364,7 @@ namespace CySkillEditor
                 AddNewEventTrack(line);
                 AddNewTrajectoryTrack(line);
                 AddNewCameraTrack(line);
+                AddNewEffectTrack(line);
                 #endregion
             }
         }
@@ -593,6 +599,15 @@ namespace CySkillEditor
         /// </summary>
         private void DrawSideBarAndTimeLines()
         {
+            CountClip = 0;
+            foreach (KeyValuePair<UnityEngine.Object, List<JClipRenderData>> kvp in timelineClipRenderDataMap)
+            {
+                foreach (var clip in kvp.Value)
+                {
+                    clip.index = CountClip++;
+                }
+            }
+
             TypeList = CurrentSequence.SortedTimelinesLists;
             JTimelineContainer[] containers = CurrentSequence.SortedTimelineContainers;
 
@@ -611,8 +626,21 @@ namespace CySkillEditor
                 bool CurcontainerfoldState = false;
                 if (FoldStateDict.ContainsKey(i + 1))
                 {
-                    FoldStateDict[i + 1] = EditorGUI.Foldout(FloatingRect, FoldStateDict[i + 1], container.name);
+                    Rect temp = FloatingRect;
+                    temp.width = 20;
+                    FoldStateDict[i + 1] = EditorGUI.Foldout(temp, FoldStateDict[i + 1], "");
                     CurcontainerfoldState = FoldStateDict[i + 1];
+                    Rect temp1 = FloatingRect;
+                    temp1.x += 20;
+                  //  temp1.y -= 1;
+                    temp1.width -= 20;
+                  //  temp1.height -=2;
+                    if (GUI.Button(temp1, new GUIContent(container.AffectedObject.name, "模型"), EditorStyles.toolbarButton))
+                    {
+                        ResetSelection();
+                        Selection.activeGameObject = container.gameObject;
+                    }
+
                     Rect menuBtn = FloatingRect;
                     menuBtn.x = menuBtn.x + menuBtn.width ;
                     menuBtn.width = lineHeight;
@@ -624,7 +652,7 @@ namespace CySkillEditor
 
                 if (CurcontainerfoldState)
                 {
-                    foreach (TimeLineType type in Enum.GetValues(typeof(TimeLineType)))
+                    foreach (TimeLineType type in showTypeList)
                     {
                         // TODO: 遍历操作
                         int index = (int)type;
@@ -674,6 +702,7 @@ namespace CySkillEditor
                                     SideBarAndLineForEvent(line);
                                     SideBarAndLineForTrajectory(line);
                                     SideBarAndLineForCamera(line);
+                                    SideBarAndLineForEffect(line);
                                     #endregion
                                 }
                                 GUILayout.EndVertical();
@@ -750,8 +779,8 @@ namespace CySkillEditor
 
                 GUILayout.EndArea();
 
-                SelectionArea = VisibleArea;
-                if (SelectionArea.Contains(UnityEngine.Event.current.mousePosition) || UnityEngine.Event.current.rawType == EventType.MouseUp || UnityEngine.Event.current.rawType == EventType.MouseDrag)
+              //  SelectionArea = VisibleArea;
+                if (VisibleArea.Contains(UnityEngine.Event.current.mousePosition) || UnityEngine.Event.current.rawType == EventType.MouseUp || UnityEngine.Event.current.rawType == EventType.MouseDrag)
                     HandleEvent(UnityEngine.Event.current.rawType == EventType.MouseUp ? UnityEngine.Event.current.rawType : UnityEngine.Event.current.type, UnityEngine.Event.current.button, UnityEngine.Event.current.mousePosition);
 
                 // Render our mouse drag box.
@@ -903,12 +932,12 @@ namespace CySkillEditor
                         if (renderclip.renderRect.Contains(mousePosition))
                             allObjectsUnderMouse.Add(renderclip);
                     }
-
-                    if (allObjectsUnderMouse.Count > 0)
-                        hasObjectsUnderMouse = true;
                 }
             }
-
+            if (allObjectsUnderMouse.Count > 0)
+            {
+                hasObjectsUnderMouse = true;
+            }
 
             switch (eventType)
             {
@@ -991,10 +1020,19 @@ namespace CySkillEditor
                         OnDeSelectedObjects(new List<UnityEngine.Object> { selectedObject });
                 }
             }
-            else
+            else if (IsBoxSelecting && HasStartedDrag)
+            {
+                OnSelectedObjects(allObjectsUnderMouse);
+            }
             //移动
             if (IsDragging && HasStartedDrag)
             {
+                if(allObjectsUnderMouse.Count==1)
+                if (!selectedObjects.Contains(allObjectsUnderMouse[0]))
+                {
+                        ResetSelection();
+                }
+                OnSelectedObjects(allObjectsUnderMouse);
                 DragStartPosition = new Vector2(DragStartPosition.x, DragStartPosition.y);
                 Vector2 mouseDelta = UnityEngine.Event.current.mousePosition - DragStartPosition;
 
@@ -1003,14 +1041,14 @@ namespace CySkillEditor
                     StartDraggingObjects();
                     HasProcessedInitialDrag = true;
                 }
-
+                ProcessDraggingObjects(mouseDelta);
                 if (IsDuplicating && !HasDuplicated)
                 {
 
                 }
                 else
                 {
-                    ProcessDraggingObjects(mouseDelta);
+                  ///  ProcessDraggingObjects(mouseDelta);
                 }
             }
 
@@ -1026,6 +1064,8 @@ namespace CySkillEditor
             RemoveParticleClip(clip);
             RemoveSoundClip(clip);
             RemoveKeyFrame(clip);
+            RemoveTrajectoryClip(clip);
+            RemoveEffectClip(clip);
         }
         private float TimeToContentX(float time)
         {

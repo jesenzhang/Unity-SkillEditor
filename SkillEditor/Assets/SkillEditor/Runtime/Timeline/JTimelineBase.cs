@@ -8,12 +8,13 @@ namespace CySkillEditor
     public enum TimeLineType
     {
         Animation = 0,
-        Effect = 1,
+        Particle = 1,
         Sound = 2,
         Transform = 3,
         Event = 4,
         Trajectory = 5,
-        CameraAction = 6
+        CameraAction = 6,
+        Effect = 7
     }
     /// <summary>
     /// 

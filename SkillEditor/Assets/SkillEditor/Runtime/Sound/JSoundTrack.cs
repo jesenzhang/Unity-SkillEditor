@@ -36,7 +36,7 @@ namespace CySkillEditor
         {
             if (trackClipList.Contains(clipData))
                 throw new Exception("Track already contains Clip");
-
+            clipData.Track = this;
             trackClipList.Add(clipData);
         }
 

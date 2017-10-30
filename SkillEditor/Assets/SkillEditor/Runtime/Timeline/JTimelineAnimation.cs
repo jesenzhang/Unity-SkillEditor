@@ -30,7 +30,7 @@ namespace CySkillEditor
                 {
                     animator = AffectedObject.GetComponent<Animator>();
                 }
-
+              
                 return animator;
             }
         }
@@ -46,12 +46,11 @@ namespace CySkillEditor
 
         private bool previousEnabled;
 
-        [SerializeField]
         public float RunningTime = 0;
-        [SerializeField]
+
         private float previousTime = 0.0f;
-        [SerializeField]
-        public float SequenceUpdateRate = 0.015f;
+
+        private float SequenceUpdateRate = 0.15f;
 
         [SerializeField]
         private List<JAnimationClipData> allClips = new List<JAnimationClipData>();
@@ -66,12 +65,16 @@ namespace CySkillEditor
 
         public override void StartTimeline()
         {
+            if (Animator == null)
+                return;
             InitAnimationState();
             previousEnabled = Animator.enabled;
             Animator.enabled = false;
         }
         private void InitAnimationState()
         {
+            if (Animator == null)
+                return;
             sourcePosition = AffectedObject.transform.localPosition;
             sourceOrientation = AffectedObject.transform.localRotation;
             sourceSpeed = Animator.speed;
@@ -92,6 +95,8 @@ namespace CySkillEditor
 
         public void ResetAnimation()
         {
+            if (Animator == null)
+                return;
             for (int layer = 0; layer < Animator.layerCount; layer++)
             {
                 if (!initialAnimatorStateInfo.ContainsKey(layer))
@@ -99,7 +104,9 @@ namespace CySkillEditor
                 Animator.Play(initialAnimatorStateInfo[layer].fullPathHash, layer, 0);// initialAnimatorStateInfo[layer].normalizedTime);
                 Animator.Update(0.0f);
             }
-
+            AffectedObject.transform.localPosition = sourcePosition;
+            AffectedObject.transform.localRotation= sourceOrientation;
+            Animator.speed= sourceSpeed;
             if (RunningTime > 0.0f)
             {
                 //AffectedObject.transform.localPosition = sourcePosition;
@@ -109,6 +116,8 @@ namespace CySkillEditor
 
         public override void Process(float sequenceTime, float playbackRate)
         {
+            if (Animator == null)
+                return;
             allClips.Clear();
             for (int index = 0; index < AnimationTracks.Count; index++)
             {
@@ -173,6 +182,8 @@ namespace CySkillEditor
 
         private void PlayClip(JAnimationClipData clipToPlay, int layer, float sequenceTime)
         {
+            if (Animator == null)
+                return;
             float normalizedTime = (sequenceTime - clipToPlay.StartTime) / clipToPlay.PlaybackDuration;
 
             if (clipToPlay.Looping)
@@ -195,6 +206,8 @@ namespace CySkillEditor
 
         public override void StopTimeline()
         {
+            if (Animator == null)
+                return;
             Animator.Update(-RunningTime);
             Animator.StopPlayback();
 
@@ -212,11 +225,15 @@ namespace CySkillEditor
 
         public override void EndTimeline()
         {
+            if (Animator == null)
+                return;
             Animator.enabled = previousEnabled;
         }
 
         public override void PauseTimeline()
         {
+            if (Animator == null)
+                return;
             Animator.enabled = false;
         }
 

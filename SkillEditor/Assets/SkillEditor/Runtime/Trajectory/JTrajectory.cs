@@ -16,8 +16,11 @@ namespace CySkillEditor
     [System.Serializable]
     public abstract class JAbstractTrajectory
     {
+        public Transform Target;
+        public GameObject TargetObject;
         public List<GameObject> effecrObj = new List<GameObject>();
-        public JTrajectoryClipData parent; 
+        public JSkillUnit skillunit;
+        public SkillEffectUnit effectunit;
         public int _delayBegin;
         public TRAJSTATE state = TRAJSTATE.STATE_OVER;
         public float _time = 0;
@@ -25,7 +28,7 @@ namespace CySkillEditor
         public bool _moved = false;
         public bool _active = false;
         public bool _hited = false;
-        public Vector3 _originPos = Vector3.zero;
+        protected Vector3 _originPos = Vector3.zero;
         public Vector3 _originPosOffset = Vector3.zero;
         public Vector3 _originDir = Vector3.zero;
         public Vector3 _originDirOffset = Vector3.zero;
@@ -96,13 +99,13 @@ namespace CySkillEditor
 
         public virtual float GetBeginTime()
         {
-            if (parent.skillunit.guidePolicy.type == SkillGuidePolicy.GuideType.GUIDE)
+            if (skillunit.guidePolicy.type == SkillGuidePolicy.GuideType.GUIDE)
             {
-                return parent.skillunit.guidePolicy.guideTime / 1000f;
+                return skillunit.guidePolicy.guideTime / 1000f;
             }
             else
             {
-                return (parent.skillunit.guidePolicy.guideTime+parent.skillunit.guidePolicy.guidingTime) / 1000f; ;
+                return (skillunit.guidePolicy.guideTime+skillunit.guidePolicy.guidingTime) / 1000f; ;
             }
           
         }

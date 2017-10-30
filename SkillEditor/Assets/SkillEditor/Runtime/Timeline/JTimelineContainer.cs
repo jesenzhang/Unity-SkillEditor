@@ -26,7 +26,12 @@ namespace CySkillEditor
 
         [SerializeField]
         private int index = -1;
+        [SerializeField]
+        public ModelTargetType modelType;
+
         #endregion
+
+
 
         #region Properties
         /// <summary>
@@ -140,7 +145,7 @@ namespace CySkillEditor
             {
                 timeline = line.gameObject.AddComponent<JTimelineAnimation>();
             }
-            if (type == TimeLineType.Effect && (timeline = line.GetComponent<JTimelineParticle>()) == null)
+            if (type == TimeLineType.Particle && (timeline = line.GetComponent<JTimelineParticle>()) == null)
             {
                 timeline = line.gameObject.AddComponent<JTimelineParticle>();
             }
@@ -163,6 +168,10 @@ namespace CySkillEditor
             if (type == TimeLineType.CameraAction && (timeline = line.GetComponent<JTimelineCamera>()) == null)
             {
                 timeline = line.gameObject.AddComponent<JTimelineCamera>();
+            }
+            if (type == TimeLineType.Effect && (timeline = line.GetComponent<JTimelineEffect>()) == null)
+            {
+                timeline = line.gameObject.AddComponent<JTimelineEffect>();
             }
             return timeline;
         }
